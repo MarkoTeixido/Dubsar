@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-border: #e5e7eb;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-quicksand: var(--font-quicksand);
+  --font-comfortaa: var(--font-comfortaa);
+}
+
+/* ✨ Configuración de Dark Mode para Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
+/* Variables para dark mode */
+.dark {
+  --color-background: #0a0a0a;
+  --color-foreground: #ededed;
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+/* Soporte para preferencia del sistema */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --color-background: #0a0a0a;
+    --color-foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ✨ Clases de utilidad para las fuentes personalizadas */
+.font-quicksand {
+  font-family: var(--font-quicksand);
+}
+
+.font-comfortaa {
+  font-family: var(--font-comfortaa);
+}
+
+:root {
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(240 5.3% 26.1%);
+  --sidebar-primary: hsl(240 5.9% 10%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(240 4.8% 95.9%);
+  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+@theme inline {
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+/* Dark mode */
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(107, 114, 128, 0.3);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.5);
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+
+.dark .custom-scrollbar {
+  scrollbar-color: rgba(107, 114, 128, 0.3) transparent;
+}
+
+/* Scrollbar para toda la página (opcional) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.2);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(107, 114, 128, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.4);
+}
+
+/* ✨ AJUSTES RESPONSIVE PARA MOBILE */
+
+/* Prevenir zoom en inputs en iOS */
+@media screen and (max-width: 767px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Ajustar altura del viewport en mobile (evita problemas con barra de navegación) */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Mejorar rendimiento de animaciones en mobile */
+@media (max-width: 767px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .backdrop-blur-sm {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* Ajustar modales en pantallas pequeñas */
+@media (max-width: 767px) {
+  [role="dialog"] {
+    max-width: calc(100vw - 2rem) !important;
+  }
+}
