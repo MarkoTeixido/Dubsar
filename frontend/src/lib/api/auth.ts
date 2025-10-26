@@ -66,7 +66,7 @@ class AuthApi extends ApiClient {
       throw new Error('Google OAuth solo puede ejecutarse en el cliente');
     }
 
-    const redirectUrl = `${window.location.origin}/auth/callback`;
+    const redirectUrl = `${window.location.origin}`;
 
     const data = await this.get(
       `/auth/oauth/google?redirectUrl=${encodeURIComponent(redirectUrl)}`,

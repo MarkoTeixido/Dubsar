@@ -9,6 +9,7 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { ProfileModal } from "@/components/user/ProfileModal";
 import { AnonymousLimitModal } from "@/components/chat/AnonymousLimitModal";
 import { FileLimitModal } from "@/components/chat/FileLimitModal";
+import { GoogleAuthCallbackModal } from "@/components/auth/GoogleAuthCallbackModal";
 import { useChat } from "@/hooks/chat/useChat";
 import { useConversations } from "@/hooks/conversations/useConversations";
 import { useAuth } from "@/hooks/auth/useAuth";
@@ -17,6 +18,7 @@ import { useFileUpload } from "@/hooks/files/useFileUpload";
 import { useDarkMode } from "@/hooks/ui/useDarkMode";
 import { useModals } from "@/hooks/ui/useModals";
 import { useAuthHandlers } from "@/hooks/auth/useAuthHandlers";
+import { useGoogleOAuthCallback } from "@/hooks/auth/useGoogleOAuthCallback";
 
 export default function ChatPage() {
   // Dark mode
@@ -34,6 +36,9 @@ export default function ChatPage() {
     handleUpdateProfile,
     handleDeleteAccount,
   } = useAuthHandlers(login, register, logout, updateProfile);
+
+  // Google OAuth Callback
+  const { showModal: showGoogleCallback, handleSuccess: handleGoogleSuccess, handleClose: handleGoogleClose } = useGoogleOAuthCallback();
 
   // Modales
   const modals = useModals();
@@ -256,6 +261,13 @@ export default function ChatPage() {
           currentFiles={uploadStatus.current}
           limit={uploadStatus.limit}
           isAuthenticated={isAuthenticated}
+        />
+
+        {/* Modal de Callback de Google OAuth */}
+        <GoogleAuthCallbackModal
+          isOpen={showGoogleCallback}
+          onClose={handleGoogleClose}
+          onSuccess={handleGoogleSuccess}
         />
       </div>
     </SidebarProvider>

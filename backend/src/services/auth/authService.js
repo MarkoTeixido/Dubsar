@@ -99,7 +99,8 @@ export const authService = {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${process.env.FRONTEND_URL || "http://localhost:3000"}/auth/callback`,
+        // ⚡ CAMBIO: Redirigir a home en lugar de /auth/callback
+        redirectTo: `${process.env.FRONTEND_URL || "http://localhost:3000"}`,
       },
     });
 
