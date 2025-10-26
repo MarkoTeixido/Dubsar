@@ -1,4 +1,7 @@
-import { supabase, supabaseAdmin } from "../../config/database.js";
+import { supabase } from "../../config/database.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 /**
  * Servicio de Autenticación
