@@ -89,6 +89,23 @@ export default function ChatPage() {
     isAuthenticated ? undefined : incrementMessageCount
   );
 
+  // 🔧 FIX: Calcular altura dinámica del viewport en mobile
+  useEffect(() => {
+    const setVH = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', setVH);
+
+    return () => {
+      window.removeEventListener('resize', setVH);
+      window.removeEventListener('orientationchange', setVH);
+    };
+  }, []);
+
   // Sincronizar modal de límite anónimo con useModals
   useEffect(() => {
     if (showLimitModal) {
@@ -162,7 +179,8 @@ export default function ChatPage() {
 
   return (
     <SidebarProvider defaultOpen>
-      <div className="flex h-screen w-full bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-500">
+      {/* 🔧 FIX: Usar clase personalizada para altura dinámica */}
+      <div className="flex mobile-vh-full w-full bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-500 overflow-hidden">
         {/* Sidebar */}
         <ConversationSidebar
           conversations={conversations}
@@ -179,20 +197,22 @@ export default function ChatPage() {
         />
 
         {/* Main Content */}
-        <SidebarInset className="flex flex-col">
-          {/* Header */}
-          <AppHeader
-            darkMode={darkMode}
-            onToggleDarkMode={toggleDarkMode}
-            isAuthenticated={isAuthenticated}
-            currentConversationId={currentConversationId}
-            conversationTitle={conversations.find((c) => c.id === currentConversationId)?.title}
-            onLoginClick={modals.openLoginModal}
-            onRegisterClick={modals.openRegisterModal}
-          />
+        <SidebarInset className="flex flex-col min-h-0 flex-1">
+          {/* Header - 🔧 FIX: Altura fija y no shrink */}
+          <div className="flex-shrink-0">
+            <AppHeader
+              darkMode={darkMode}
+              onToggleDarkMode={toggleDarkMode}
+              isAuthenticated={isAuthenticated}
+              currentConversationId={currentConversationId}
+              conversationTitle={conversations.find((c) => c.id === currentConversationId)?.title}
+              onLoginClick={modals.openLoginModal}
+              onRegisterClick={modals.openRegisterModal}
+            />
+          </div>
 
-          {/* Chat Area */}
-          <div className="flex-1 flex flex-col items-center justify-center overflow-hidden">
+          {/* Chat Area - 🔧 FIX: Flex-1 con min-height 0 para permitir scroll interno */}
+          <div className="flex-1 min-h-0 flex flex-col items-center justify-center overflow-hidden">
             <ChatContainer
               messages={messages}
               input={input}
@@ -207,16 +227,16 @@ export default function ChatPage() {
               fileError={fileError || uploadError}
             />
 
-            {/* Indicadores */}
+            {/* Indicadores - 🔧 FIX: Posicionados absolutamente para no afectar el layout */}
             {!isAuthenticated && uploadStatus.remaining <= 1 && (
-              <div className="pb-2 text-sm text-gray-500 dark:text-gray-400">
+              <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-sm text-gray-500 dark:text-gray-400 bg-white/80 dark:bg-gray-800/80 px-3 py-1 rounded-full backdrop-blur-sm">
                 Te queda <span className="font-bold text-orange-500">{uploadStatus.remaining}</span> archivo
                 disponible
               </div>
             )}
 
             {!isAuthenticated && remainingMessages <= 5 && (
-              <div className="pb-4 text-sm text-gray-500 dark:text-gray-400">
+              <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 text-sm text-gray-500 dark:text-gray-400 bg-white/80 dark:bg-gray-800/80 px-3 py-1 rounded-full backdrop-blur-sm">
                 Te quedan <span className="font-bold text-blue-500">{remainingMessages}</span> mensajes
               </div>
             )}
