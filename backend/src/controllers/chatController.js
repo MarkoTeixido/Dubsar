@@ -11,11 +11,18 @@ export const chatController = {
   /**
    * Chat con streaming (Server-Sent Events)
    * POST /chat/stream
+   * Body: { message, conversationId, fileData?, clientHistory? }
    */
   async streamChat(req, res, next) {
     try {
-      const { message, conversationId, fileData } = req.body;
+      // ✅ NUEVO: Aceptar clientHistory del frontend
+      const { message, conversationId, fileData, clientHistory } = req.body;
       const userId = req.user?.id;
+
+      console.log(`📨 [${conversationId}] Mensaje recibido ${userId ? `de usuario ${userId}` : '(anónimo)'}`);
+      if (clientHistory) {
+        console.log(`📜 [${conversationId}] Historial del cliente: ${clientHistory.length} mensajes`);
+      }
 
       // Validar acceso
       await chatService.validateAccess(conversationId, userId);
@@ -23,13 +30,18 @@ export const chatController = {
       // Configurar SSE
       streamingService.setupSSE(res);
 
-      // Guardar mensaje del usuario
+      // Guardar mensaje del usuario (solo si está autenticado)
       await chatService.saveUserMessage(userId, conversationId, message, fileData);
 
-      // Obtener historial
-      const geminiHistory = await chatService.getFormattedHistory(userId, conversationId, true);
+      // ✅ MEJORADO: Obtener historial (usa clientHistory si es anónimo)
+      const geminiHistory = await chatService.getFormattedHistory(
+        userId, 
+        conversationId, 
+        clientHistory, 
+        true
+      );
 
-      // Preparar partes del mensaje (texto + imagen)
+      // Preparar partes del mensaje (texto + imagen/archivo)
       const messageParts = messageParserService.prepareMessageParts(message, fileData);
 
       // Procesar stream
@@ -60,22 +72,31 @@ export const chatController = {
   /**
    * Chat sin streaming (respuesta completa)
    * POST /chat
+   * Body: { message, conversationId, fileData?, clientHistory? }
    */
   async chat(req, res, next) {
     try {
-      const { message, conversationId, fileData } = req.body;
+      // ✅ NUEVO: Aceptar clientHistory del frontend
+      const { message, conversationId, fileData, clientHistory } = req.body;
       const userId = req.user?.id;
+
+      console.log(`📨 [${conversationId}] Mensaje sin streaming ${userId ? `de usuario ${userId}` : '(anónimo)'}`);
 
       // Validar acceso
       await chatService.validateAccess(conversationId, userId);
 
-      // Guardar mensaje del usuario
+      // Guardar mensaje del usuario (solo si está autenticado)
       await chatService.saveUserMessage(userId, conversationId, message, fileData);
 
-      // Obtener historial
-      const geminiHistory = await chatService.getFormattedHistory(userId, conversationId, true);
+      // ✅ MEJORADO: Obtener historial (usa clientHistory si es anónimo)
+      const geminiHistory = await chatService.getFormattedHistory(
+        userId, 
+        conversationId, 
+        clientHistory, 
+        true
+      );
 
-      // Preparar partes del mensaje (texto + imagen)
+      // Preparar partes del mensaje (texto + imagen/archivo)
       const messageParts = messageParserService.prepareMessageParts(message, fileData);
 
       // Generar respuesta completa (sin streaming)
@@ -84,7 +105,7 @@ export const chatController = {
         geminiHistory
       );
 
-      // Guardar respuesta del bot
+      // Guardar respuesta del bot (solo si está autenticado)
       await chatService.saveBotResponse(userId, conversationId, responseText);
 
       // Obtener conteo de mensajes
@@ -97,6 +118,7 @@ export const chatController = {
         conversationId,
       });
     } catch (error) {
+      console.error("❌ Error en chat:", error);
       const statusCode = error.message.includes("permiso") ? 403 : 500;
       return res.status(statusCode).json({
         error: "Error en chat",

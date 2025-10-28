@@ -1,13 +1,19 @@
-import { geminiClient, GEMINI_MODEL, GEMINI_CONFIG } from "../../config/gemini.js";
+import { getModelWithInstructions, GEMINI_CONFIG } from "../../config/gemini.js";
 
 /**
  * Servicio para interactuar con Gemini AI
+ * Maneja la generación de respuestas con y sin streaming
  */
 export const geminiService = {
-  // Generar respuesta sin streaming (legacy)
+  /**
+   * Genera respuesta completa sin streaming (legacy - no se usa actualmente)
+   * @param {string} message - Mensaje del usuario
+   * @param {Array} history - Historial de conversación formateado
+   * @returns {Promise<string>} - Respuesta generada
+   */
   async generateResponse(message, history = []) {
     try {
-      const model = geminiClient.getGenerativeModel({ model: GEMINI_MODEL });
+      const model = getModelWithInstructions();
 
       const chat = model.startChat({
         history,
@@ -28,10 +34,15 @@ export const geminiService = {
     }
   },
 
-  // Generar respuesta con streaming
+  /**
+   * Genera respuesta con streaming (legacy - no se usa actualmente)
+   * @param {string} message - Mensaje del usuario
+   * @param {Array} history - Historial de conversación formateado
+   * @returns {Promise<Stream>} - Stream de chunks
+   */
   async generateStreamResponse(message, history = []) {
     try {
-      const model = geminiClient.getGenerativeModel({ model: GEMINI_MODEL });
+      const model = getModelWithInstructions();
 
       const chat = model.startChat({
         history,
@@ -47,11 +58,14 @@ export const geminiService = {
   },
 
   /**
-   * ⚡ NUEVO: Generar respuesta sin streaming usando partes (texto + imagen)
+   * Genera respuesta completa usando partes (texto + imagen/archivo)
+   * @param {Array} parts - Array de partes del mensaje (texto, imágenes, etc.)
+   * @param {Array} history - Historial de conversación formateado
+   * @returns {Promise<string>} - Respuesta generada
    */
   async generateResponseWithParts(parts, history = []) {
     try {
-      const model = geminiClient.getGenerativeModel({ model: GEMINI_MODEL });
+      const model = getModelWithInstructions();
 
       const chat = model.startChat({
         history,
@@ -73,18 +87,21 @@ export const geminiService = {
   },
 
   /**
-   * ⚡ NUEVO: Generar respuesta con streaming usando partes (texto + imagen)
+   * Genera respuesta con streaming usando partes (texto + imagen/archivo)
+   * Método principal usado en la aplicación
+   * @param {Array} parts - Array de partes del mensaje
+   * @param {Array} history - Historial de conversación formateado
+   * @returns {Promise<Stream>} - Stream de chunks para SSE
    */
   async generateStreamResponseWithParts(parts, history = []) {
     try {
-      const model = geminiClient.getGenerativeModel({ model: GEMINI_MODEL });
+      const model = getModelWithInstructions();
 
       const chat = model.startChat({
         history,
         generationConfig: GEMINI_CONFIG,
       });
 
-      // Enviar partes (puede incluir texto e imagen)
       const result = await chat.sendMessageStream(parts);
       return result.stream;
     } catch (error) {

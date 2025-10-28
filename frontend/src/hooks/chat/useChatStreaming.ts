@@ -15,6 +15,13 @@ interface StreamingParams {
   onError: (errorMessage: string) => void;
 }
 
+// ✅ CONSTANTE: Máximo de mensajes a enviar (10 intercambios = 20 mensajes)
+const MAX_HISTORY_MESSAGES = 20;
+
+/**
+ * Hook para manejar el streaming de respuestas del chat
+ * Gestiona SSE (Server-Sent Events) y actualizaciones en localStorage para usuarios anónimos
+ */
 export function useChatStreaming() {
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -29,6 +36,9 @@ export function useChatStreaming() {
     onError,
   }: StreamingParams) => {
     try {
+      // ✅ Preparar historial para usuarios anónimos
+      let clientHistory: Array<{ sender: string; text: string }> | undefined;
+
       // Guardar mensaje del usuario en localStorage si es anónimo
       if (!isAuthenticated) {
         const conv = storage.getAnonymousConversation(conversationId);
@@ -45,19 +55,59 @@ export function useChatStreaming() {
             }),
           });
           storage.saveAnonymousConversation(conv);
+
+          // ✅ MEJORADO: Extraer SOLO texto del historial (sin imágenes/archivos)
+          const allMessages = conv.messages.map((msg) => {
+            // Si el mensaje tiene imagen, agregar nota de que había una imagen
+            let textContent = msg.text;
+            if (msg.fileUrl && msg.fileName) {
+              const fileType = msg.fileType || '';
+              if (fileType.startsWith('image/')) {
+                // Agregar contexto de que hubo una imagen
+                textContent = textContent 
+                  ? `[Imagen compartida: ${msg.fileName}] ${textContent}`
+                  : `[Imagen compartida: ${msg.fileName}]`;
+              } else {
+                // Para documentos
+                textContent = textContent 
+                  ? `[Documento compartido: ${msg.fileName}] ${textContent}`
+                  : `[Documento compartido: ${msg.fileName}]`;
+              }
+            }
+
+            return {
+              sender: msg.sender,
+              text: textContent,
+            };
+          });
+
+          // Solo enviar los últimos MAX_HISTORY_MESSAGES mensajes
+          clientHistory = allMessages.slice(-MAX_HISTORY_MESSAGES);
+          
+          console.log(
+            `📜 Historial: ${allMessages.length} mensajes totales, ` +
+            `enviando últimos ${clientHistory.length} (solo texto, sin archivos)`
+          );
         }
       }
 
       abortControllerRef.current = new AbortController();
 
-      // Enviar mensaje con datos del archivo
+      // Enviar mensaje con historial (solo texto, sin imágenes pesadas)
       const response = await chat.sendMessage(
         conversationId,
         userMessage.text,
-        fileData
+        fileData,
+        clientHistory
       );
 
       if (!response.ok) {
+        // ✅ MEJORADO: Mejor mensaje de error
+        if (response.status === 413) {
+          throw new Error(
+            "El archivo es demasiado grande. Límite máximo: 30MB"
+          );
+        }
         throw new Error(`Error del servidor: ${response.status}`);
       }
 
@@ -73,6 +123,7 @@ export function useChatStreaming() {
 
       onStart();
 
+      // Procesar stream SSE
       while (true) {
         const { done, value } = await reader.read();
 
@@ -138,6 +189,8 @@ export function useChatStreaming() {
         if (error.message.includes("Failed to fetch")) {
           errorMessage +=
             "Verifica que el backend esté en `http://localhost:8000`";
+        } else if (error.message.includes("demasiado grande")) {
+          errorMessage = `❌ **${error.message}**`;
         } else {
           errorMessage += `**Detalles:** ${error.message}`;
         }
