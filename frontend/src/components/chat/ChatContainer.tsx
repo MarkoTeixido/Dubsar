@@ -54,7 +54,7 @@ export function ChatContainer({
         onFileSelect={onFileSelect}
         selectedFile={selectedFile}
         onRemoveFile={onRemoveFile}
-        fileError={fileError}
+        fileError={fileError || undefined}
       />
     </div>
   );
