@@ -1,6 +1,26 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Optimización para navegadores modernos
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  
+  // Optimización de producción
+  swcMinify: true,
+  
+  experimental: {
+    // Optimizar imports de paquetes pesados
+    optimizePackageImports: [
+      'lucide-react', 
+      '@radix-ui/react-avatar', 
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-tooltip',
+      'framer-motion'
+    ],
+  },
+  
   images: {
     remotePatterns: [
       {

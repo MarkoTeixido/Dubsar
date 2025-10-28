@@ -1,15 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import dynamic from 'next/dynamic';
 import { AppHeader } from "@/components/layout/Header";
 import { ChatContainer } from "@/components/chat/ChatContainer";
 import { ConversationSidebar } from "@/components/sidebar/ConversationSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { AuthModal } from "@/components/auth/AuthModal";
-import { ProfileModal } from "@/components/user/ProfileModal";
-import { AnonymousLimitModal } from "@/components/chat/AnonymousLimitModal";
-import { FileLimitModal } from "@/components/chat/FileLimitModal";
-import { GoogleAuthCallbackModal } from "@/components/auth/GoogleAuthCallbackModal";
 import { useChat } from "@/hooks/chat/useChat";
 import { useConversations } from "@/hooks/conversations/useConversations";
 import { useAuth } from "@/hooks/auth/useAuth";
@@ -19,6 +15,28 @@ import { useDarkMode } from "@/hooks/ui/useDarkMode";
 import { useModals } from "@/hooks/ui/useModals";
 import { useAuthHandlers } from "@/hooks/auth/useAuthHandlers";
 import { useGoogleOAuthCallback } from "@/hooks/auth/useGoogleOAuthCallback";
+
+// Carga dinámica de modales para reducir bundle inicial
+const AuthModal = dynamic(() => import("@/components/auth/AuthModal").then(mod => ({ default: mod.AuthModal })), {
+  ssr: false,
+});
+
+const ProfileModal = dynamic(() => import("@/components/user/ProfileModal").then(mod => ({ default: mod.ProfileModal })), {
+  ssr: false,
+  loading: () => null
+});
+
+const AnonymousLimitModal = dynamic(() => import("@/components/chat/AnonymousLimitModal").then(mod => ({ default: mod.AnonymousLimitModal })), {
+  ssr: false,
+});
+
+const FileLimitModal = dynamic(() => import("@/components/chat/FileLimitModal").then(mod => ({ default: mod.FileLimitModal })), {
+  ssr: false,
+});
+
+const GoogleAuthCallbackModal = dynamic(() => import("@/components/auth/GoogleAuthCallbackModal").then(mod => ({ default: mod.GoogleAuthCallbackModal })), {
+  ssr: false,
+});
 
 export default function ChatPage() {
   // Dark mode

@@ -1,10 +1,10 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { Send, AlertCircle } from "lucide-react";
-import { FilePreview } from "./FilePreview";
+import { Send } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { VoiceRecorderButton } from "./VoiceRecorderButton";
 import { FileAttachmentButton } from "./FileAttachmentButton";
+import { FilePreview } from "./FilePreview";
 import { useChatInput } from "@/hooks/chat/useChatInput";
 import { useVoiceRecording } from "@/hooks/chat/useVoiceRecording";
 
@@ -16,7 +16,7 @@ type ChatInputProps = {
   onFileSelect?: (file: File) => void;
   selectedFile?: File | null;
   onRemoveFile?: () => void;
-  fileError?: string | null;
+  fileError?: string;
 };
 
 export function ChatInput({
@@ -82,6 +82,7 @@ export function ChatInput({
             onClick={onSend}
             type="button"
             disabled={(!value.trim() && !selectedFile) || disabled}
+            aria-label="Enviar mensaje"
             className="p-2 rounded-lg transition-all duration-200 
                        bg-gray-100 dark:bg-gray-700 
                        hover:bg-gray-200 dark:hover:bg-gray-600 
@@ -104,8 +105,7 @@ export function ChatInput({
             className="flex items-center gap-2 justify-center text-xs"
           >
             <div className="flex items-center gap-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-3 py-2 rounded-lg border border-red-200 dark:border-red-800">
-              <AlertCircle size={14} />
-              <span>{fileError}</span>
+              <span className="font-medium">{fileError}</span>
             </div>
           </motion.div>
         )}
