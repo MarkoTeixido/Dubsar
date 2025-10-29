@@ -69,8 +69,9 @@ export default function ChatPage() {
   // Modales
   const modals = useModals();
 
-  // Reset Password Modal
+  // Reset Password Modal con token
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+  const [resetPasswordToken, setResetPasswordToken] = useState<string | null>(null);
 
   // Change Password Modal
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
@@ -121,7 +122,7 @@ export default function ChatPage() {
     isAuthenticated ? undefined : incrementMessageCount
   );
 
-  // FIX: Calcular altura dinámica del viewport en mobile
+  // 🔧 FIX: Calcular altura dinámica del viewport en mobile
   useEffect(() => {
     const setVH = () => {
       const vh = window.innerHeight * 0.01;
@@ -164,17 +165,22 @@ export default function ChatPage() {
         
         // Supabase envía type=recovery en el hash cuando es reset password
         if (type === "recovery" && accessToken) {
-          // Limpiar inmediatamente cualquier sesión activa
+          console.log('🔐 Token de recuperación detectado');
+          
+          // Guardar el token ANTES de limpiar
+          setResetPasswordToken(accessToken);
+          
+          // Limpiar el hash de la URL
+          window.history.replaceState(null, "", window.location.pathname);
+          
+          // Limpiar tokens locales para prevenir auto-login
           localStorage.removeItem('access_token');
           localStorage.removeItem('refresh_token');
           
-          // Limpiar el hash pero mantener el token para el modal
-          window.history.replaceState(null, "", window.location.pathname);
+          console.log('✅ Token guardado, mostrando modal de reset');
           
-          // Esperar un momento para asegurar que se limpió la sesión
-          setTimeout(() => {
-            setShowResetPasswordModal(true);
-          }, 100);
+          // Mostrar modal de reset password
+          setShowResetPasswordModal(true);
         }
       };
 
@@ -245,7 +251,7 @@ export default function ChatPage() {
 
   return (
     <SidebarProvider defaultOpen>
-      {/* FIX: Usar clase personalizada para altura dinámica */}
+      {/* 🔧 FIX: Usar clase personalizada para altura dinámica */}
       <div className="flex mobile-vh-full w-full bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-500 overflow-hidden">
         {/* Sidebar */}
         <ConversationSidebar
@@ -361,7 +367,11 @@ export default function ChatPage() {
         {/* Modal de Reset Password */}
         <ResetPasswordModal
           isOpen={showResetPasswordModal}
-          onClose={() => setShowResetPasswordModal(false)}
+          onClose={() => {
+            setShowResetPasswordModal(false);
+            setResetPasswordToken(null);
+          }}
+          token={resetPasswordToken}
           onSubmit={async (newPassword, token) => {
             await resetPassword(newPassword, token);
           }}

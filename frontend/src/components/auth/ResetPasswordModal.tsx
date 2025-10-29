@@ -9,40 +9,22 @@ import { useResetPasswordForm } from "@/hooks/auth/useResetPasswordForm";
 type ResetPasswordModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  token: string | null;
   onSubmit: (newPassword: string, token: string) => Promise<void>;
   onSuccess?: () => void;
 };
 
-export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: ResetPasswordModalProps) {
-  const [token, setToken] = useState<string | null>(null);
+export function ResetPasswordModal({ isOpen, onClose, token, onSubmit, onSuccess }: ResetPasswordModalProps) {
   const [tokenError, setTokenError] = useState(false);
   const { formData, updateField, loading, error, success, handleSubmit, reset } = useResetPasswordForm();
 
   useEffect(() => {
-    if (isOpen) {
-      // Esperar un momento antes de verificar el token
-      const timer = setTimeout(() => {
-        const hash = window.location.hash;
-        const params = new URLSearchParams(hash.substring(1));
-        const accessToken = params.get("access_token");
-        const type = params.get("type");
-
-        // Solo procesar si es un token de recuperación
-        if (accessToken && type === "recovery") {
-          setToken(accessToken);
-          // Limpiar el hash de la URL inmediatamente
-          window.history.replaceState(null, "", window.location.pathname);
-        } else if (type === "recovery" && !accessToken) {
-          setTokenError(true);
-        } else {
-          // Si no es recovery, cerrar el modal
-          onClose();
-        }
-      }, 300);
-
-      return () => clearTimeout(timer);
+    if (isOpen && !token) {
+      setTokenError(true);
+    } else if (isOpen && token) {
+      setTokenError(false);
     }
-  }, [isOpen, onClose]);
+  }, [isOpen, token]);
 
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +44,6 @@ export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: Res
 
   const handleClose = () => {
     reset();
-    setToken(null);
     setTokenError(false);
     onClose();
   };
@@ -173,10 +154,6 @@ export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: Res
                     </p>
                   </div>
                 </motion.div>
-              ) : !token ? (
-                <div className="flex justify-center py-8">
-                  <Loader2 className="animate-spin text-blue-500" size={40} />
-                </div>
               ) : (
                 <motion.form
                   initial={{ opacity: 0, y: 20 }}
