@@ -9,11 +9,11 @@ dotenv.config();
  */
 export const passwordRecoveryService = {
   /**
-   * Envía email de recuperación de contraseña
-   */
+  * Envía email de recuperación de contraseña
+  */
   async sendPasswordResetEmail(email) {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.FRONTEND_URL || "http://localhost:3000"}`,
+      redirectTo: `${process.env.FRONTEND_URL || "http://localhost:3000"}?recovery=true`,
     });
 
     if (error) {
