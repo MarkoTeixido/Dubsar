@@ -9,9 +9,10 @@ type LoginFormProps = {
   onSubmit: (email: string, password: string) => Promise<void>;
   onGoogleAuth: () => Promise<void>;
   onSwitchToRegister?: () => void;
+  onForgotPassword?: () => void;
 };
 
-export function LoginForm({ onSubmit, onGoogleAuth, onSwitchToRegister }: LoginFormProps) {
+export function LoginForm({ onSubmit, onGoogleAuth, onSwitchToRegister, onForgotPassword }: LoginFormProps) {
   const { formData, updateField, loading, error, handleSubmit } = useLoginForm();
 
   const onFormSubmit = async (e: React.FormEvent) => {
@@ -73,6 +74,19 @@ export function LoginForm({ onSubmit, onGoogleAuth, onSwitchToRegister }: LoginF
             />
           </div>
         </div>
+
+        {/* Forgot Password Link */}
+        {onForgotPassword && (
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={onForgotPassword}
+              className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
+          </div>
+        )}
 
         {/* Error */}
         {error && (

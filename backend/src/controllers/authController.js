@@ -1,6 +1,7 @@
 import { authService } from "../services/auth/authService.js";
 import { userService } from "../services/auth/userService.js";
 import { userDeletionService } from "../services/auth/userDeletionService.js";
+import { passwordRecoveryService } from "../services/auth/passwordRecoveryService.js";
 
 /**
  * Controlador de Autenticación
@@ -183,6 +184,63 @@ export const authController = {
     } catch (error) {
       return res.status(500).json({
         error: "Error al eliminar cuenta",
+        message: error.message,
+      });
+    }
+  },
+
+    /**
+   * Solicitar recuperación de contraseña
+   * POST /auth/forgot-password
+   */
+  async forgotPassword(req, res, next) {
+    try {
+      const { email } = req.body;
+
+      const result = await passwordRecoveryService.sendPasswordResetEmail(email);
+
+      res.json({
+        success: true,
+        message: result.message,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        error: "Error al procesar solicitud",
+        message: error.message,
+      });
+    }
+  },
+
+  /**
+   * Resetear contraseña con token
+   * POST /auth/reset-password
+   */
+  async resetPassword(req, res, next) {
+    try {
+      const { newPassword } = req.body;
+      const authHeader = req.headers.authorization;
+      
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+          error: "Token no proporcionado",
+          message: "Se requiere un token de recuperación válido",
+        });
+      }
+
+      const token = authHeader.split(" ")[1];
+      
+      // Verificar token antes de actualizar
+      await passwordRecoveryService.verifyRecoveryToken(token);
+      
+      const result = await passwordRecoveryService.updatePassword(newPassword);
+
+      res.json({
+        success: true,
+        message: result.message,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        error: "Error al resetear contraseña",
         message: error.message,
       });
     }

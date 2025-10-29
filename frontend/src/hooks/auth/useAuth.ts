@@ -131,6 +131,24 @@ export function useAuth() {
     return response.user;
   }, [authState.user]);
 
+    const forgotPassword = useCallback(async (email: string) => {
+    try {
+      const response = await auth.forgotPassword(email);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }, []);
+
+  const resetPassword = useCallback(async (newPassword: string, token: string) => {
+    try {
+      const response = await auth.resetPassword(newPassword, token);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }, []);
+
   return {
     user: authState.user,
     session: authState.session,
@@ -141,5 +159,7 @@ export function useAuth() {
     logout,
     updateProfile,
     checkAuth,
+    forgotPassword,
+    resetPassword,
   };
 }

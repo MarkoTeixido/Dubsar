@@ -24,6 +24,20 @@ router.post(
 router.post("/logout", authController.logout);
 
 router.post(
+  "/forgot-password",
+  validateRequiredFields(["email"]),
+  validateEmail,
+  authController.forgotPassword
+);
+
+router.post(
+  "/reset-password",
+  validateRequiredFields(["newPassword"]),
+  validatePassword(6),
+  authController.resetPassword
+);
+
+router.post(
   "/refresh",
   validateRequiredFields(["refresh_token"]),
   authController.refreshToken

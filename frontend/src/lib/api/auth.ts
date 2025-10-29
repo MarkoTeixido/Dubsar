@@ -79,6 +79,21 @@ class AuthApi extends ApiClient {
       throw new Error('No se pudo obtener URL de Google OAuth');
     }
   }
+
+    async forgotPassword(email: string) {
+    return this.post('/auth/forgot-password', {
+      email,
+    }, { 'Content-Type': 'application/json' });
+  }
+
+  async resetPassword(newPassword: string, token: string) {
+    return this.post('/auth/reset-password', {
+      newPassword,
+    }, { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
 }
 
 export const auth = new AuthApi();

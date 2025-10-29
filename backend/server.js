@@ -17,12 +17,14 @@ app.listen(PORT, () => {
   console.log(`   POST   /auth/login - Iniciar sesión`);
   console.log(`   POST   /auth/logout - Cerrar sesión`);
   console.log(`   POST   /auth/refresh - Refrescar token`);
+  console.log(`   POST   /auth/forgot-password - Recuperar contraseña`);
+  console.log(`   POST   /auth/reset-password - Resetear contraseña`);
   console.log(`   PATCH  /auth/profile - Actualizar perfil`);
   console.log(`   GET    /auth/me - Perfil del usuario`);
-  console.log(`   DELETE /auth/account - Eliminar cuenta ⚡`);
+  console.log(`   DELETE /auth/account - Eliminar cuenta`);
   console.log(`   GET    /auth/oauth/google - OAuth con Google`);
   console.log(`\n💬 Chat (público con límites anónimos):`);
-  console.log(`   POST   /chat/stream - Chat con streaming ⚡`);
+  console.log(`   POST   /chat/stream - Chat con streaming`);
   console.log(`   POST   /chat - Chat sin streaming`);
   console.log(`\n📝 Conversaciones (requiere auth):`);
   console.log(`   POST   /conversations - Crear conversación`);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dynamic from 'next/dynamic';
 import { AppHeader } from "@/components/layout/Header";
 import { ChatContainer } from "@/components/chat/ChatContainer";
@@ -38,12 +38,16 @@ const GoogleAuthCallbackModal = dynamic(() => import("@/components/auth/GoogleAu
   ssr: false,
 });
 
+const ResetPasswordModal = dynamic(() => import("@/components/auth/ResetPasswordModal").then(mod => ({ default: mod.ResetPasswordModal })), {
+  ssr: false,
+});
+
 export default function ChatPage() {
   // Dark mode
   const { darkMode, mounted, toggleDarkMode } = useDarkMode();
 
   // Auth
-  const { user, isAuthenticated, isLoading: authLoading, login, register, logout, updateProfile } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading, login, register, logout, updateProfile, forgotPassword, resetPassword } = useAuth();
 
   // Auth handlers
   const {
@@ -60,6 +64,9 @@ export default function ChatPage() {
 
   // Modales
   const modals = useModals();
+
+  // Reset Password Modal
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
 
   // Anonymous chat limits
   const {
@@ -139,6 +146,20 @@ export default function ChatPage() {
     }
   }, [mounted, authLoading, isAuthenticated, fetchUploadStatus]);
 
+  // Detectar token de recuperación de contraseña en el hash
+  useEffect(() => {
+    if (mounted && !authLoading) {
+      const hash = window.location.hash;
+      const params = new URLSearchParams(hash.substring(1));
+      const type = params.get("type");
+      
+      // Supabase envía type=recovery en el hash cuando es reset password
+      if (type === "recovery") {
+        setShowResetPasswordModal(true);
+      }
+    }
+  }, [mounted, authLoading]);
+
   // Crear primera conversación si no hay ninguna (solo para anónimos)
   useEffect(() => {
     if (
@@ -184,6 +205,11 @@ export default function ChatPage() {
   const handleRegisterWithClose = async (email: string, password: string, fullName: string) => {
     await handleRegister(email, password, fullName);
     modals.closeAuthModal();
+  };
+
+  // Handler para forgot password
+  const handleForgotPassword = async (email: string) => {
+    await forgotPassword(email);
   };
 
   // Loading state
@@ -269,6 +295,7 @@ export default function ChatPage() {
           onLoginSuccess={handleLoginWithClose}
           onRegisterSuccess={handleRegisterWithClose}
           onGoogleAuth={handleGoogleAuth}
+          onForgotPassword={handleForgotPassword}
         />
 
         {user && (
@@ -306,6 +333,21 @@ export default function ChatPage() {
           isOpen={showGoogleCallback}
           onClose={handleGoogleClose}
           onSuccess={handleGoogleSuccess}
+        />
+
+        {/* Modal de Reset Password */}
+        <ResetPasswordModal
+          isOpen={showResetPasswordModal}
+          onClose={() => setShowResetPasswordModal(false)}
+          onSubmit={async (newPassword, token) => {
+            await resetPassword(newPassword, token);
+          }}
+          onSuccess={() => {
+            // Abrir modal de login después de resetear
+            setTimeout(() => {
+              modals.openLoginModal();
+            }, 500);
+          }}
         />
       </div>
     </SidebarProvider>
