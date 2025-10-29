@@ -366,9 +366,10 @@ export default function ChatPage() {
             await changePassword(currentPassword, newPassword);
           }}
           onSuccess={() => {
-            // Cerrar modal después de cambiar contraseña exitosamente
-            setTimeout(() => {
+            // Cerrar sesión automáticamente después de cambiar contraseña
+            setTimeout(async () => {
               setShowChangePasswordModal(false);
+              await handleLogout();
             }, 2000);
           }}
         />

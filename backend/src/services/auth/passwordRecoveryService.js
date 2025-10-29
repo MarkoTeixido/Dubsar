@@ -29,10 +29,12 @@ export const passwordRecoveryService = {
    * Actualiza la contraseña del usuario (sin verificar la actual)
    * Usado cuando se resetea por email
    */
-  async updatePassword(newPassword) {
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
+  async updatePassword(newPassword, token) {
+    // Usar el token proporcionado para actualizar la contraseña
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(
+      token, // Esto necesita el userId, no el token
+      { password: newPassword }
+    );
 
     if (error) {
       throw new Error(`Error al actualizar contraseña: ${error.message}`);

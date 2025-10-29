@@ -212,9 +212,9 @@ export const authController = {
   },
 
   /**
-   * Resetear contraseña con token
-   * POST /auth/reset-password
-   */
+  * Resetear contraseña con token
+  * POST /auth/reset-password
+  */
   async resetPassword(req, res, next) {
     try {
       const { newPassword } = req.body;
@@ -229,10 +229,11 @@ export const authController = {
 
       const token = authHeader.split(" ")[1];
       
-      // Verificar token antes de actualizar
-      await passwordRecoveryService.verifyRecoveryToken(token);
+      // Verificar token y obtener usuario
+      const verifyResult = await passwordRecoveryService.verifyRecoveryToken(token);
       
-      const result = await passwordRecoveryService.updatePassword(newPassword);
+      // Actualizar contraseña usando el userId
+      const result = await passwordRecoveryService.updatePassword(newPassword, verifyResult.user.id);
 
       res.json({
         success: true,

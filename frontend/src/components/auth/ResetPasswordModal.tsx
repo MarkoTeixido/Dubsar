@@ -18,26 +18,31 @@ export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: Res
   const [tokenError, setTokenError] = useState(false);
   const { formData, updateField, loading, error, success, handleSubmit, reset } = useResetPasswordForm();
 
-    useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       // Esperar un momento antes de verificar el token
       const timer = setTimeout(() => {
         const hash = window.location.hash;
         const params = new URLSearchParams(hash.substring(1));
         const accessToken = params.get("access_token");
+        const type = params.get("type");
 
-        if (accessToken) {
+        // Solo procesar si es un token de recuperación
+        if (accessToken && type === "recovery") {
           setToken(accessToken);
-          // Limpiar el hash de la URL
+          // Limpiar el hash de la URL inmediatamente
           window.history.replaceState(null, "", window.location.pathname);
-        } else {
+        } else if (type === "recovery" && !accessToken) {
           setTokenError(true);
+        } else {
+          // Si no es recovery, cerrar el modal
+          onClose();
         }
-      }, 500); // Delay de 500ms
+      }, 300);
 
       return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -194,14 +199,18 @@ export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: Res
                         placeholder="••••••••"
                         className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all"
                         disabled={loading}
+                        autoFocus
                       />
                     </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Mínimo 6 caracteres
+                    </p>
                   </div>
 
                   {/* Confirm Password */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Confirmar contraseña
+                      Confirmar nueva contraseña
                     </label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
