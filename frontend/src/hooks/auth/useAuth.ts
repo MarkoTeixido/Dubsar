@@ -149,6 +149,15 @@ export function useAuth() {
     }
   }, []);
 
+  const changePassword = useCallback(async (currentPassword: string, newPassword: string) => {
+    try {
+      const response = await auth.changePassword(currentPassword, newPassword);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }, []);
+
   return {
     user: authState.user,
     session: authState.session,
@@ -161,5 +170,6 @@ export function useAuth() {
     checkAuth,
     forgotPassword,
     resetPassword,
+    changePassword,
   };
 }

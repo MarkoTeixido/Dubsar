@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, LogOut, AlertTriangle, Trash2 } from "lucide-react";
+import { User, LogOut, AlertTriangle, Trash2, Lock } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AvatarPicker } from "./AvatarPicker";
 import { DeleteAccountModal } from "./DeleteAccountModal";
@@ -14,7 +14,8 @@ type ProfileModalProps = {
   user: UserType;
   onUpdateProfile: (data: { fullName?: string; avatar?: string }) => Promise<void>;
   onLogout?: () => void;
-  onDeleteAccount?: () => Promise<void>; // ⚡ AGREGADO
+  onDeleteAccount?: () => Promise<void>;
+  onChangePassword?: () => void;
 };
 
 export function ProfileModal({
@@ -23,13 +24,14 @@ export function ProfileModal({
   user,
   onUpdateProfile,
   onLogout,
-  onDeleteAccount, // ⚡ AGREGADO
+  onDeleteAccount,
+  onChangePassword,
 }: ProfileModalProps) {
   const [fullName, setFullName] = useState(user.fullName || "");
   const [selectedAvatar, setSelectedAvatar] = useState(user.avatar || "");
   const [loading, setLoading] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false); // ⚡ AGREGADO
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleSave = async () => {
     setLoading(true);
@@ -63,7 +65,6 @@ export function ProfileModal({
     setShowLogoutConfirm(false);
   };
 
-  // ⚡ NUEVO: Handler para eliminar cuenta
   const handleDeleteAccount = async () => {
     if (onDeleteAccount) {
       await onDeleteAccount();
@@ -89,7 +90,7 @@ export function ProfileModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar"
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden max-h-[90vh] overflow-y-auto"
             >
               {/* Header con Branding */}
               <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 px-6 pt-8 pb-6 border-b border-gray-200 dark:border-gray-700">
@@ -140,7 +141,7 @@ export function ProfileModal({
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Tu nombre"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all"
                     />
                   </div>
                 </div>
@@ -191,20 +192,38 @@ export function ProfileModal({
                     </motion.button>
                   )}
 
-                  {/* ⚡ NUEVO: Separador */}
-                  <div className="relative py-2">
+                  {/* Separador con texto "Seguridad" */}
+                  <div className="relative py-4">
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
                     </div>
+                    <div className="relative flex justify-center">
+                      <span className="bg-white dark:bg-gray-800 px-3 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                        Seguridad
+                      </span>
+                    </div>
                   </div>
 
-                  {/* ⚡ NUEVO: Eliminar Cuenta */}
+                  {/* Cambiar Contraseña */}
+                  {onChangePassword && (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={onChangePassword}
+                      className="w-full py-2.5 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Lock size={18} />
+                      Cambiar contraseña
+                    </motion.button>
+                  )}
+
+                  {/* Eliminar Cuenta */}
                   {onDeleteAccount && (
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setDeleteModalOpen(true)}
-                      className="w-full py-2.5 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 font-medium rounded-lg transition-colors flex items-center justify-center gap-2 border border-red-200 dark:border-red-800"
+                      className="w-full py-2.5 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                     >
                       <Trash2 size={18} />
                       Eliminar cuenta
@@ -282,7 +301,7 @@ export function ProfileModal({
         )}
       </AnimatePresence>
 
-      {/* ⚡ NUEVO: Modal de confirmación para eliminar cuenta */}
+      {/* Modal de confirmación para eliminar cuenta */}
       <DeleteAccountModal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}

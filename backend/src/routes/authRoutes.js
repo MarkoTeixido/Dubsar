@@ -33,7 +33,7 @@ router.post(
 router.post(
   "/reset-password",
   validateRequiredFields(["newPassword"]),
-  validatePassword(6),
+  validatePassword(6, "newPassword"),
   authController.resetPassword
 );
 
@@ -49,7 +49,15 @@ router.get("/oauth/google", authController.oauthGoogle);
 router.get("/me", authenticateUser, authController.getProfile);
 router.patch("/profile", authenticateUser, authController.updateProfile);
 
-// ⚡ NUEVO: Eliminar cuenta
+// Cambiar contraseña (requiere autenticación)
+router.post(
+  "/change-password",
+  authenticateUser,
+  validateRequiredFields(["currentPassword", "newPassword"]),
+  authController.changePassword
+);
+
+// Eliminar cuenta
 router.delete("/account", authenticateUser, authController.deleteAccount);
 
 export default router;

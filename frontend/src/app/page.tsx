@@ -42,12 +42,16 @@ const ResetPasswordModal = dynamic(() => import("@/components/auth/ResetPassword
   ssr: false,
 });
 
+const ChangePasswordModal = dynamic(() => import("@/components/auth/ChangePasswordModal").then(mod => ({ default: mod.ChangePasswordModal })), {
+  ssr: false,
+});
+
 export default function ChatPage() {
   // Dark mode
   const { darkMode, mounted, toggleDarkMode } = useDarkMode();
 
   // Auth
-  const { user, isAuthenticated, isLoading: authLoading, login, register, logout, updateProfile, forgotPassword, resetPassword } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading, login, register, logout, updateProfile, forgotPassword, resetPassword, changePassword } = useAuth();
 
   // Auth handlers
   const {
@@ -67,6 +71,9 @@ export default function ChatPage() {
 
   // Reset Password Modal
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+
+  // Change Password Modal
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   // Anonymous chat limits
   const {
@@ -306,6 +313,7 @@ export default function ChatPage() {
             onUpdateProfile={handleUpdateProfile}
             onLogout={handleLogout}
             onDeleteAccount={handleDeleteAccount}
+            onChangePassword={() => setShowChangePasswordModal(true)}
           />
         )}
 
@@ -347,6 +355,21 @@ export default function ChatPage() {
             setTimeout(() => {
               modals.openLoginModal();
             }, 500);
+          }}
+        />
+
+        {/* Modal de Cambiar Contraseña */}
+        <ChangePasswordModal
+          isOpen={showChangePasswordModal}
+          onClose={() => setShowChangePasswordModal(false)}
+          onSubmit={async (currentPassword, newPassword) => {
+            await changePassword(currentPassword, newPassword);
+          }}
+          onSuccess={() => {
+            // Cerrar modal después de cambiar contraseña exitosamente
+            setTimeout(() => {
+              setShowChangePasswordModal(false);
+            }, 2000);
           }}
         />
       </div>

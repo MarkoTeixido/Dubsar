@@ -1,52 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { X, Lock, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { X, Lock, Loader2, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { useResetPasswordForm } from "@/hooks/auth/useResetPasswordForm";
+import { useChangePasswordForm } from "@/hooks/auth/useChangePasswordForm";
 
-type ResetPasswordModalProps = {
+type ChangePasswordModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (newPassword: string, token: string) => Promise<void>;
+  onSubmit: (currentPassword: string, newPassword: string) => Promise<void>;
   onSuccess?: () => void;
 };
 
-export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: ResetPasswordModalProps) {
-  const [token, setToken] = useState<string | null>(null);
-  const [tokenError, setTokenError] = useState(false);
-  const { formData, updateField, loading, error, success, handleSubmit, reset } = useResetPasswordForm();
-
-    useEffect(() => {
-    if (isOpen) {
-      // Esperar un momento antes de verificar el token
-      const timer = setTimeout(() => {
-        const hash = window.location.hash;
-        const params = new URLSearchParams(hash.substring(1));
-        const accessToken = params.get("access_token");
-
-        if (accessToken) {
-          setToken(accessToken);
-          // Limpiar el hash de la URL
-          window.history.replaceState(null, "", window.location.pathname);
-        } else {
-          setTokenError(true);
-        }
-      }, 500); // Delay de 500ms
-
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen]);
+export function ChangePasswordModal({ isOpen, onClose, onSubmit, onSuccess }: ChangePasswordModalProps) {
+  const { formData, updateField, loading, error, success, handleSubmit, reset } = useChangePasswordForm();
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token) return;
-
-    const result = await handleSubmit(async (newPassword) => {
-      await onSubmit(newPassword, token);
-    });
-
+    const result = await handleSubmit(onSubmit);
+    
     if (result) {
       setTimeout(() => {
         handleClose();
@@ -57,12 +33,11 @@ export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: Res
 
   const handleClose = () => {
     reset();
-    setToken(null);
-    setTokenError(false);
+    setShowCurrentPassword(false);
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
     onClose();
   };
-
-  if (!isOpen) return null;
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
@@ -111,44 +86,16 @@ export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: Res
               </motion.div>
 
               <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-white text-center font-quicksand">
-                {tokenError ? "Link Inválido" : "Nueva Contraseña"}
+                Cambiar Contraseña
               </Dialog.Title>
-              {!tokenError && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">
-                  Ingresa tu nueva contraseña
-                </p>
-              )}
+              <p className="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">
+                Actualiza tu contraseña de forma segura
+              </p>
             </div>
 
             {/* Form Container */}
             <div className="p-6">
-              {tokenError ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center space-y-4"
-                >
-                  <div className="flex justify-center">
-                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
-                      <AlertCircle className="text-red-600 dark:text-red-400" size={32} />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                      Link inválido o expirado
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      El enlace de recuperación es inválido o ha expirado. Por favor solicita uno nuevo.
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleClose}
-                    className="w-full py-2.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-                  >
-                    Entendido
-                  </button>
-                </motion.div>
-              ) : success ? (
+              {success ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -164,14 +111,10 @@ export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: Res
                       ¡Contraseña actualizada!
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Tu contraseña ha sido actualizada exitosamente. Ya puedes iniciar sesión.
+                      Tu contraseña ha sido cambiada exitosamente.
                     </p>
                   </div>
                 </motion.div>
-              ) : !token ? (
-                <div className="flex justify-center py-8">
-                  <Loader2 className="animate-spin text-blue-500" size={40} />
-                </div>
               ) : (
                 <motion.form
                   initial={{ opacity: 0, y: 20 }}
@@ -179,40 +122,92 @@ export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: Res
                   transition={{ duration: 0.3 }}
                   onSubmit={onFormSubmit}
                   className="space-y-4"
+                  autoComplete="off"
                 >
+                  {/* Current Password */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Contraseña actual
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10 pointer-events-none" size={18} />
+                      <input
+                        type={showCurrentPassword ? "text" : "password"}
+                        value={formData.currentPassword}
+                        onChange={(e) => updateField("currentPassword", e.target.value)}
+                        placeholder="••••••••"
+                        autoComplete="off"
+                        data-form-type="other"
+                        className="w-full pl-10 pr-12 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all [&::-ms-reveal]:hidden [&::-ms-clear]:hidden [&::-webkit-contacts-auto-fill-button]:hidden [&::-webkit-credentials-auto-fill-button]:hidden"
+                        disabled={loading}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors z-20"
+                        tabIndex={-1}
+                      >
+                        {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                  </div>
+
                   {/* New Password */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Nueva contraseña
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10 pointer-events-none" size={18} />
                       <input
-                        type="password"
+                        type={showNewPassword ? "text" : "password"}
                         value={formData.newPassword}
                         onChange={(e) => updateField("newPassword", e.target.value)}
                         placeholder="••••••••"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all"
+                        autoComplete="off"
+                        data-form-type="other"
+                        className="w-full pl-10 pr-12 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all [&::-ms-reveal]:hidden [&::-ms-clear]:hidden [&::-webkit-contacts-auto-fill-button]:hidden [&::-webkit-credentials-auto-fill-button]:hidden"
                         disabled={loading}
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors z-20"
+                        tabIndex={-1}
+                      >
+                        {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
                     </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Mínimo 6 caracteres
+                    </p>
                   </div>
 
-                  {/* Confirm Password */}
+                  {/* Confirm New Password */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Confirmar contraseña
+                      Confirmar nueva contraseña
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10 pointer-events-none" size={18} />
                       <input
-                        type="password"
+                        type={showConfirmPassword ? "text" : "password"}
                         value={formData.confirmPassword}
                         onChange={(e) => updateField("confirmPassword", e.target.value)}
                         placeholder="••••••••"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all"
+                        autoComplete="off"
+                        data-form-type="other"
+                        className="w-full pl-10 pr-12 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all [&::-ms-reveal]:hidden [&::-ms-clear]:hidden [&::-webkit-contacts-auto-fill-button]:hidden [&::-webkit-credentials-auto-fill-button]:hidden"
                         disabled={loading}
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors z-20"
+                        tabIndex={-1}
+                      >
+                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
                     </div>
                   </div>
 
@@ -241,7 +236,7 @@ export function ResetPasswordModal({ isOpen, onClose, onSubmit, onSuccess }: Res
                         Actualizando...
                       </>
                     ) : (
-                      "Actualizar contraseña"
+                      "Cambiar contraseña"
                     )}
                   </motion.button>
                 </motion.form>

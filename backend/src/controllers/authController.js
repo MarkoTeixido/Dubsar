@@ -189,7 +189,7 @@ export const authController = {
     }
   },
 
-    /**
+  /**
    * Solicitar recuperación de contraseña
    * POST /auth/forgot-password
    */
@@ -241,6 +241,44 @@ export const authController = {
     } catch (error) {
       return res.status(400).json({
         error: "Error al resetear contraseña",
+        message: error.message,
+      });
+    }
+  },
+
+  /**
+   * Cambiar contraseña (requiere contraseña actual)
+   * POST /auth/change-password
+   */
+  async changePassword(req, res, next) {
+    try {
+      const { currentPassword, newPassword } = req.body;
+      
+      // Verificar que req.user existe (viene del middleware authenticateUser)
+      if (!req.user || !req.user.id || !req.user.email) {
+        return res.status(401).json({
+          error: "No autenticado",
+          message: "Debes iniciar sesión para cambiar tu contraseña",
+        });
+      }
+
+      const userId = req.user.id;
+      const userEmail = req.user.email;
+
+      const result = await passwordRecoveryService.changePassword(
+        currentPassword,
+        newPassword,
+        userId,
+        userEmail
+      );
+
+      res.json({
+        success: true,
+        message: result.message,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        error: "Error al cambiar contraseña",
         message: error.message,
       });
     }

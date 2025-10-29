@@ -9,14 +9,14 @@ class AuthApi extends ApiClient {
       email,
       password,
       fullName,
-    }, { 'Content-Type': 'application/json' });
+    });
   }
 
   async login(email: string, password: string) {
     const data = await this.post('/auth/login', {
       email,
       password,
-    }, { 'Content-Type': 'application/json' });
+    });
 
     // Guardar tokens
     if (data.session) {
@@ -69,8 +69,7 @@ class AuthApi extends ApiClient {
     const redirectUrl = `${window.location.origin}`;
 
     const data = await this.get(
-      `/auth/oauth/google?redirectUrl=${encodeURIComponent(redirectUrl)}`,
-      { 'Content-Type': 'application/json' }
+      `/auth/oauth/google?redirectUrl=${encodeURIComponent(redirectUrl)}`
     );
 
     if (data.url) {
@@ -80,10 +79,10 @@ class AuthApi extends ApiClient {
     }
   }
 
-    async forgotPassword(email: string) {
+  async forgotPassword(email: string) {
     return this.post('/auth/forgot-password', {
       email,
-    }, { 'Content-Type': 'application/json' });
+    });
   }
 
   async resetPassword(newPassword: string, token: string) {
@@ -92,6 +91,14 @@ class AuthApi extends ApiClient {
     }, { 
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
+    });
+  }
+
+  async changePassword(currentPassword: string, newPassword: string) {
+    // NO pasar headers personalizados, usar los de getAuthHeaders() automáticamente
+    return this.post('/auth/change-password', {
+      currentPassword,
+      newPassword,
     });
   }
 }
