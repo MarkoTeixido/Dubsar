@@ -62,19 +62,21 @@ export function validateEmail(req, res, next) {
 /**
  * Middleware para validar longitud mínima de contraseña
  * @param {number} minLength - Longitud mínima (por defecto 6)
+ * @param {string} fieldName - Nombre del campo a validar (por defecto 'password')
  * @returns {Function} Middleware de Express
  * 
  * @example
  * router.post('/auth/register', validatePassword(8), handler);
+ * router.post('/auth/reset', validatePassword(6, 'newPassword'), handler);
  */
-export function validatePassword(minLength = 6) {
+export function validatePassword(minLength = 6, fieldName = 'password') {
   return (req, res, next) => {
-    const { password } = req.body;
+    const password = req.body[fieldName];
 
     if (!password) {
       return res.status(400).json({
         error: "Contraseña requerida",
-        message: "El campo password es obligatorio",
+        message: `El campo ${fieldName} es obligatorio`,
       });
     }
 
