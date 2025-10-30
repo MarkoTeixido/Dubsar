@@ -17,9 +17,9 @@ test.describe('Autenticación con Modales', () => {
     // Verificar que el modal se abre
     await expect(page.locator('text=Bienvenido de nuevo')).toBeVisible({ timeout: 5000 })
     
-    // Verificar tabs
-    await expect(page.locator('button:has-text("Iniciar sesión")').first()).toBeVisible()
-    await expect(page.locator('button:has-text("Registrarse")').first()).toBeVisible()
+    // Verificar tabs (usar selectores más específicos)
+    await expect(page.locator('div[role="dialog"] .flex.gap-2 button:has-text("Iniciar sesión")')).toBeVisible()
+    await expect(page.locator('div[role="dialog"] .flex.gap-2 button:has-text("Registrarse")')).toBeVisible()
   })
 
   test('Modal de register se abre correctamente', async ({ page }) => {
@@ -28,11 +28,11 @@ test.describe('Autenticación con Modales', () => {
     // Click en "Registrarse" del header
     await page.click('button:has-text("Registrarse")')
     
-    // Verificar que el modal se abre (buscar dentro del modal, no en el header)
+    // Verificar que el modal se abre
     await expect(page.getByRole('heading', { name: /Bienvenido de nuevo|Crear cuenta/i })).toBeVisible({ timeout: 5000 })
     
-    // Click en tab de registrarse si no está activo (con force porque puede estar cubierto por overlay)
-    await page.locator('div[role="dialog"] button:has-text("Registrarse")').click({ force: true })
+    // Click en tab de registrarse usando selector más específico (dentro del contenedor de tabs)
+    await page.locator('div[role="dialog"] .flex.gap-2 button').filter({ hasText: 'Registrarse' }).click()
     
     // Verificar título
     await expect(page.getByRole('heading', { name: 'Crear cuenta' })).toBeVisible({ timeout: 5000 })
@@ -50,30 +50,37 @@ test.describe('Autenticación con Modales', () => {
     // Abrir modal de login
     await page.click('button:has-text("Iniciar sesión")')
     
-    // Esperar a que cargue el modal
+    // Esperar a que cargue el modal completamente
     await expect(page.locator('text=Bienvenido de nuevo')).toBeVisible({ timeout: 5000 })
     
-    // Llenar formulario (dentro del modal)
-    await page.locator('div[role="dialog"] input[type="email"]').fill('test@example.com')
-    await page.locator('div[role="dialog"] input[type="password"]').fill('password123')
+    // Esperar a que los campos del formulario estén disponibles
+    const emailInput = page.locator('div[role="dialog"] input[type="email"]')
+    const passwordInput = page.locator('div[role="dialog"] input[type="password"]')
     
-    // Click en botón de "Iniciar sesión" del formulario (dentro del modal)
-    await page.locator('div[role="dialog"] button[type="submit"]:has-text("Iniciar sesión")').click({ force: true })
+    await expect(emailInput).toBeVisible({ timeout: 5000 })
+    await expect(passwordInput).toBeVisible({ timeout: 5000 })
+    
+    // Llenar formulario
+    await emailInput.fill('test@example.com')
+    await passwordInput.fill('password123')
+    
+    // Click en botón de "Iniciar sesión" del formulario
+    await page.locator('div[role="dialog"] button[type="submit"]').filter({ hasText: 'Iniciar sesión' }).click()
     
     // Verificar que el modal se cierra
     await expect(page.locator('text=Bienvenido de nuevo')).not.toBeVisible({ timeout: 5000 })
   })
 
   test('Modal se cierra al hacer click en X', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/', { waitUntil: 'networkidle' })
     
     // Abrir modal
     await page.click('button:has-text("Iniciar sesión")')
     
     await expect(page.locator('text=Bienvenido de nuevo')).toBeVisible({ timeout: 5000 })
     
-    // Click en botón de cerrar (X) con force
-    await page.locator('button[aria-label="Cerrar"]').click({ force: true })
+    // Click en botón de cerrar (X)
+    await page.locator('button[aria-label="Cerrar"]').click()
     
     // Verificar que se cierra
     await expect(page.locator('text=Bienvenido de nuevo')).not.toBeVisible({ timeout: 2000 })
@@ -87,14 +94,14 @@ test.describe('Autenticación con Modales', () => {
     // Verificar que estamos en login
     await expect(page.locator('text=Bienvenido de nuevo')).toBeVisible()
     
-    // Click en tab de Registrarse (dentro del modal con force)
-    await page.locator('div[role="dialog"] button:has-text("Registrarse")').first().click({ force: true })
+    // Click en tab de Registrarse usando selector específico
+    await page.locator('div[role="dialog"] .flex.gap-2 button').filter({ hasText: 'Registrarse' }).click()
     
     // Verificar que cambió a registro
     await expect(page.getByRole('heading', { name: 'Crear cuenta' })).toBeVisible({ timeout: 3000 })
     
-    // Volver a login (con force)
-    await page.locator('div[role="dialog"] button:has-text("Iniciar sesión")').first().click({ force: true })
+    // Volver a login
+    await page.locator('div[role="dialog"] .flex.gap-2 button').filter({ hasText: 'Iniciar sesión' }).click()
     
     // Verificar que volvió
     await expect(page.locator('text=Bienvenido de nuevo')).toBeVisible({ timeout: 3000 })

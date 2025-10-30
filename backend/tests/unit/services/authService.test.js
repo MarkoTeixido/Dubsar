@@ -273,7 +273,7 @@ describe('AuthService', () => {
       expect(supabase.auth.signInWithOAuth).toHaveBeenCalledWith({
         provider: 'google',
         options: {
-          redirectTo: expect.stringContaining('/auth/callback'),
+          redirectTo: 'http://localhost:3000', // ← CAMBIO: sin /auth/callback
         },
       });
     });

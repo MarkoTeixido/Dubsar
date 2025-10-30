@@ -111,6 +111,6 @@ export const chatService = {
       return 0; // Usuarios anónimos no tienen conteo en BD
     }
 
-    return await messageService.getMessageCount(conversationId);
+    return await messageService.countMessages(conversationId);
   },
 };

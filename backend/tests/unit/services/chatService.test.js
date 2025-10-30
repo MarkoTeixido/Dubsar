@@ -140,8 +140,10 @@ describe('ChatService', () => {
       messageService.getHistory.mockResolvedValue(mockHistory);
       messageService.formatForGemini.mockResolvedValue([]);
 
-      await chatService.getFormattedHistory('user-123', 'conv-123', false);
+      // ✅ CAMBIO: Pasar null como clientHistory y false como excludeLast
+      await chatService.getFormattedHistory('user-123', 'conv-123', null, false);
 
+      // Debe pasar el array completo sin modificar
       expect(messageService.formatForGemini).toHaveBeenCalledWith(mockHistory);
     });
 
@@ -196,12 +198,12 @@ describe('ChatService', () => {
 
   describe('getMessageCount', () => {
     it('debe retornar conteo de mensajes para usuario autenticado', async () => {
-      messageService.countMessages.mockResolvedValue(15);
+      messageService.countMessages.mockResolvedValue(15); // ✅ CORRECTO: countMessages
 
       const result = await chatService.getMessageCount('user-123', 'conv-123');
 
       expect(result).toBe(15);
-      expect(messageService.countMessages).toHaveBeenCalledWith('conv-123');
+      expect(messageService.countMessages).toHaveBeenCalledWith('conv-123'); // ✅ CORRECTO
     });
 
     it('debe retornar 0 para usuario anónimo', async () => {

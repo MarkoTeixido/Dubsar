@@ -2,19 +2,21 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { geminiService } from '../../../src/services/integrations/geminiService.js';
 import { geminiClient } from '../../../src/config/gemini.js';
 
+// ✅ Mock completo con getModelWithInstructions
 vi.mock('../../../src/config/gemini.js', () => ({
   geminiClient: {
     getGenerativeModel: vi.fn(),
   },
   GEMINI_MODEL: 'gemini-test',
   GEMINI_CONFIG: { maxOutputTokens: 2048, temperature: 0.7 },
+  getModelWithInstructions: vi.fn(), // ← ESTO FALTABA
 }));
 
 describe('GeminiService', () => {
   let mockChat;
   let mockModel;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
 
     mockChat = {
@@ -26,6 +28,10 @@ describe('GeminiService', () => {
       startChat: vi.fn(() => mockChat),
     };
 
+    // ✅ Importar dinámicamente para obtener el mock
+    const { getModelWithInstructions } = await import('../../../src/config/gemini.js');
+    getModelWithInstructions.mockReturnValue(mockModel);
+    
     geminiClient.getGenerativeModel.mockReturnValue(mockModel);
   });
 

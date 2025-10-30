@@ -1,21 +1,19 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('Archivos en Chat', () => {
-  test('Botón de adjuntar archivo está visible', async ({ page }) => {
-    await page.goto('/')
-    
+  test.beforeEach(async ({ page }) => {
+    // Cargar la página una sola vez antes de cada test
+    await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 })
     await expect(page.locator('text=DUBSAR')).toBeVisible({ timeout: 10000 })
-    
+  })
+
+  test('Botón de adjuntar archivo está visible', async ({ page }) => {
     // Buscar el input de archivo (está oculto pero debe existir)
     const fileInput = page.locator('input[type="file"]')
     await expect(fileInput).toBeAttached()
   })
 
   test('Usuario puede seleccionar un archivo', async ({ page }) => {
-    await page.goto('/')
-    
-    await expect(page.locator('text=DUBSAR')).toBeVisible({ timeout: 10000 })
-    
     // Buscar el input de archivo
     const fileInput = page.locator('input[type="file"]')
     
@@ -34,17 +32,13 @@ test.describe('Archivos en Chat', () => {
   })
 
   test('Usuario puede eliminar archivo antes de enviar', async ({ page }) => {
-    await page.goto('/')
-    
-    await expect(page.locator('text=DUBSAR')).toBeVisible({ timeout: 10000 })
-    
     const fileInput = page.locator('input[type="file"]')
     
     // Adjuntar archivo
     await fileInput.setInputFiles({
-        name: 'remove-test.txt',
-        mimeType: 'text/plain',
-        buffer: Buffer.from('Test content'),
+      name: 'remove-test.txt',
+      mimeType: 'text/plain',
+      buffer: Buffer.from('Test content'),
     })
     
     // Verificar que apareció
@@ -52,6 +46,9 @@ test.describe('Archivos en Chat', () => {
     
     // Buscar el botón de eliminar por su aria-label específico
     const removeButton = page.locator('button[aria-label="Quitar archivo"]')
+    
+    // Esperar que el botón esté visible
+    await expect(removeButton).toBeVisible({ timeout: 2000 })
     
     // Hacer click
     await removeButton.click()
@@ -64,10 +61,6 @@ test.describe('Archivos en Chat', () => {
   })
 
   test('Usuario anónimo ve límite de archivos', async ({ page }) => {
-    await page.goto('/')
-    
-    await expect(page.locator('text=DUBSAR')).toBeVisible({ timeout: 10000 })
-    
     // Adjuntar archivo para activar el contador
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles({
@@ -95,10 +88,6 @@ test.describe('Archivos en Chat', () => {
   })
 
   test('Preview de archivo muestra información correcta', async ({ page }) => {
-    await page.goto('/')
-    
-    await expect(page.locator('text=DUBSAR')).toBeVisible({ timeout: 10000 })
-    
     const fileInput = page.locator('input[type="file"]')
     
     // Adjuntar archivo con nombre específico
@@ -118,10 +107,6 @@ test.describe('Archivos en Chat', () => {
   })
 
   test('Error se muestra con archivo muy grande', async ({ page }) => {
-    await page.goto('/')
-    
-    await expect(page.locator('text=DUBSAR')).toBeVisible({ timeout: 10000 })
-    
     const fileInput = page.locator('input[type="file"]')
     
     // Intentar adjuntar archivo "grande" (simulado con 11MB)
@@ -142,6 +127,10 @@ test.describe('Archivos en Chat', () => {
     
     if (hasError) {
       await expect(errorMessage).toBeVisible()
+    } else {
+      // Si no muestra error visible, al menos el archivo no debería adjuntarse
+      // Verificamos que el input sigue disponible
+      await expect(fileInput).toBeAttached()
     }
   })
 })

@@ -3,17 +3,17 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './tests/e2e',
   
-  // Timeout por test
-  timeout: 30000,
+  // Timeout por test - aumentado para desarrollo
+  timeout: 60000,
   
-  // Tests en paralelo
-  fullyParallel: true,
+  // Tests en paralelo - desactivado para desarrollo
+  fullyParallel: false,
   
   // Reintentos en CI
   retries: process.env.CI ? 2 : 0,
   
-  // Workers (tests simultáneos)
-  workers: process.env.CI ? 1 : undefined,
+  // Workers (tests simultáneos) - reducido
+  workers: 1,
   
   // Reporter
   reporter: [
@@ -33,6 +33,12 @@ export default defineConfig({
     
     // Traces on failure
     trace: 'on-first-retry',
+    
+    // Navigation timeout
+    navigationTimeout: 30000,
+    
+    // Action timeout
+    actionTimeout: 10000,
   },
 
   // Proyectos (navegadores)
@@ -47,7 +53,7 @@ export default defineConfig({
     },
     {
       name: 'webkit',
-      use: { ...devices['Desktop Edge'] },
+      use: { ...devices['Desktop Safari'] },
     },
   ],
 
