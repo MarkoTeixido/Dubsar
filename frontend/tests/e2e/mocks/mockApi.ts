@@ -1,7 +1,6 @@
 import { Page } from '@playwright/test'
 import {
   mockUsers,
-  mockSessions,
   mockConversations,
   mockMessages,
   createLoginResponse,
