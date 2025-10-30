@@ -5,7 +5,7 @@ on:
     branches: [ main, develop ]
     paths:
       - 'backend/**'
-      - '.github/workflows/ci-backend.yml'
+      - '.github/workflows/ci/ci-backend.yml'
   pull_request:
     branches: [ main ]
     paths:
@@ -41,7 +41,6 @@ jobs:
         run: npm run test:unit
         env:
           NODE_ENV: test
-          # ⭐ Variables necesarias para que los tests funcionen
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

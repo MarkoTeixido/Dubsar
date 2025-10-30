@@ -171,7 +171,7 @@ jobs:
   # ============================================
   # FRONTEND CD (solo en main, después de tests)
   # ============================================
-      frontend-deploy:
+  frontend-deploy:
     name: Frontend - Deploy to Vercel
     needs: [frontend-lint, frontend-build, frontend-docker]
     runs-on: ubuntu-latest

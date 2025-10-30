@@ -1,0 +1,66 @@
+name: Health Check
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Cada hora
+  workflow_dispatch:
+
+jobs:
+  backend-health:
+    name: Check Backend Health
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🏥 Health Check
+        run: |
+          echo "🔍 Checking backend health..."
+          
+          # URL del backend en producción (cambiar por tu URL real)
+          BACKEND_URL="${{ secrets.BACKEND_URL || 'http://localhost:8000' }}"
+          
+          response=$(curl -s -w "\n%{http_code}" --max-time 10 "$BACKEND_URL/health")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          
+          if [ "$http_code" -eq 200 ]; then
+            echo "✅ Backend is healthy"
+            echo "$body" | jq '.'
+            
+            status=$(echo "$body" | jq -r '.status')
+            uptime=$(echo "$body" | jq -r '.uptime.formatted')
+            memory=$(echo "$body" | jq -r '.memory.heapUsed')
+            
+            echo ""
+            echo "📊 Summary:"
+            echo "  Status: $status"
+            echo "  Uptime: $uptime"
+            echo "  Memory: $memory"
+          else
+            echo "❌ Backend unhealthy! HTTP $http_code"
+            echo "$body"
+            exit 1
+          fi
+      
+      - name: 📊 Check Metrics
+        if: success()
+        run: |
+          BACKEND_URL="${{ secrets.BACKEND_URL || 'http://localhost:8000' }}"
+          
+          echo "📈 Fetching metrics..."
+          metrics=$(curl -s "$BACKEND_URL/metrics")
+          echo "$metrics" | jq '.'
+          
+          # Extraer métricas clave
+          total_requests=$(echo "$metrics" | jq -r '.requests.total')
+          error_rate=$(echo "$metrics" | jq -r '.errors.rate')
+          
+          echo ""
+          echo "📊 Metrics Summary:"
+          echo "  Total Requests: $total_requests"
+          echo "  Error Rate: $error_rate"
+      
+      - name: 🚨 Alert on Failure
+        if: failure()
+        run: |
+          echo "::error::❌ Backend health check failed!"
+          echo "::error::Please check the backend status immediately."

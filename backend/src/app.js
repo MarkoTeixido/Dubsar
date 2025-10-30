@@ -2,7 +2,7 @@
 import express from "express";
 import cors from "cors";
 
-// Importar configuraciones (esto valida las variables de entorno)
+// Importar configuraciones
 import "./config/database.js";
 import "./config/gemini.js";
 
@@ -11,9 +11,12 @@ import authRoutes from "./routes/authRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
+import healthRoutes from "./routes/healthRoutes.js";
 
 // Importar middlewares
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
+import { requestLogger } from "./middleware/logger.js";
+import { trackMetrics } from "./middleware/metrics.js"; 
 
 const app = express();
 
@@ -21,16 +24,20 @@ const app = express();
 // MIDDLEWARES GLOBALES
 // ========================================
 app.use(cors());
-
-// ✅ AUMENTAR LÍMITE: 50MB para soportar imágenes en historial
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Monitoring middlewares
+app.use(trackMetrics);
+if (process.env.NODE_ENV !== 'test') {
+  app.use(requestLogger);
+}
 
 // ========================================
 // RUTAS
 // ========================================
 
-// Health check (pública)
+// Root endpoint
 app.get("/", (req, res) => {
   res.json({
     status: "✅ Dubsar AI Backend running",
@@ -40,25 +47,13 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/health", (req, res) => {
-  res.json({
-    status: "ok",
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString(),
-    database: "Supabase (PostgreSQL)",
-  });
-});
+// Health & Metrics
+app.use("/", healthRoutes); //  - /health, /metrics, /ready, /live
 
-// Rutas de autenticación (públicas)
+// Feature routes
 app.use("/auth", authRoutes);
-
-// Rutas de conversaciones (protegidas)
 app.use("/conversations", conversationRoutes);
-
-// Rutas de chat (públicas con optionalAuth)
 app.use("/chat", chatRoutes);
-
-// Rutas de archivos
 app.use("/files", fileRoutes);
 
 // ========================================
@@ -67,5 +62,4 @@ app.use("/files", fileRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// Exportar la app
 export default app;

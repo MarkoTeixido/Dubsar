@@ -5,14 +5,13 @@ on:
     branches: [ main ]
     paths:
       - 'backend/**'
-      - '.github/workflows/cd-backend.yml'
+      - '.github/workflows/cd/cd-backend.yml'
   workflow_dispatch:
 
 jobs:
   deploy:
     name: Deploy to Render Production
     runs-on: ubuntu-latest
-    # Solo deploy si estamos en main
     if: github.ref == 'refs/heads/main'
     
     steps:

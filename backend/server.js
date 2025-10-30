@@ -9,9 +9,13 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`\n🚀 Dubsar AI Backend v2.0 iniciado`);
   console.log(`📍 Servidor: http://localhost:${PORT}`);
-  console.log(`\n📊 Endpoints disponibles:`);
+  console.log(`\n📊 Endpoints de Monitoring:`);
+  console.log(`   GET    /health - Health check completo`);
+  console.log(`   GET    /metrics - Métricas del sistema`);
+  console.log(`   GET    /ready - Readiness probe`);
+  console.log(`   GET    /live - Liveness probe`);
+  console.log(`\n📋 Endpoints principales:`);
   console.log(`   GET    / - Info del servidor`);
-  console.log(`   GET    /health - Estado del servidor`);
   console.log(`\n🔐 Autenticación:`);
   console.log(`   POST   /auth/register - Registro`);
   console.log(`   POST   /auth/login - Iniciar sesión`);

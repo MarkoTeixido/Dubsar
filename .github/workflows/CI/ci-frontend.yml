@@ -5,7 +5,7 @@ on:
     branches: [ main, develop ]
     paths:
       - 'frontend/**'
-      - '.github/workflows/ci-frontend.yml'
+      - '.github/workflows/ci/ci-frontend.yml'
   pull_request:
     branches: [ main ]
     paths:
@@ -132,40 +132,3 @@ jobs:
           tags: dubsar-frontend:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-  # E2E tests con Playwright (opcional)
-  e2e:
-    name: E2E Tests
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: 📦 Checkout code
-        uses: actions/checkout@v4
-      
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
-      
-      - name: 📥 Install dependencies
-        working-directory: ./frontend
-        run: npm ci
-      
-      - name: 🎭 Install Playwright browsers
-        working-directory: ./frontend
-        run: npx playwright install --with-deps
-      
-      - name: 🧪 Run E2E tests
-        working-directory: ./frontend
-        run: npm run test:e2e
-        env:
-          NEXT_PUBLIC_API_URL: http://localhost:8000
-      
-      - name: 📤 Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: frontend/playwright-report/
