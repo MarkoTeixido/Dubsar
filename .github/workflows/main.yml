@@ -99,6 +99,43 @@ jobs:
   # ============================================
   # FRONTEND CI
   # ============================================
+  frontend-test:
+    name: Frontend - Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📦 Checkout
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      
+      - name: 📥 Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+      
+      - name: 🧪 Run unit tests
+        working-directory: ./frontend
+        run: npm run test:unit
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+      
+      - name: 🔗 Run integration tests
+        working-directory: ./frontend
+        run: npm run test:integration
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+      
+      - name: 📊 Coverage
+        working-directory: ./frontend
+        run: npm run test:coverage
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+
   frontend-lint:
     name: Frontend - Lint
     runs-on: ubuntu-latest
@@ -173,7 +210,7 @@ jobs:
   # ============================================
   frontend-deploy:
     name: Frontend - Deploy to Vercel
-    needs: [frontend-lint, frontend-build, frontend-docker]
+    needs: [frontend-test, frontend-lint, frontend-build, frontend-docker]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
