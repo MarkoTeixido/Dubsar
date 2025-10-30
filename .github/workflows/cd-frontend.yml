@@ -1,0 +1,32 @@
+name: Deploy Frontend to Vercel
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/cd-frontend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Vercel Production
+    runs-on: ubuntu-latest
+    # Solo deploy si estamos en main
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🚀 Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./frontend
+      
+      - name: ✅ Deployment Complete
+        run: echo "🎉 Frontend deployed to production!"

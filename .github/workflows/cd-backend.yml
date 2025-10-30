@@ -1,0 +1,33 @@
+name: Deploy Backend to Render
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/cd-backend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Render Production
+    runs-on: ubuntu-latest
+    # Solo deploy si estamos en main
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 🚀 Trigger Render Deployment
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}")
+          if [ $response -eq 200 ] || [ $response -eq 201 ]; then
+            echo "✅ Deployment triggered successfully!"
+          else
+            echo "❌ Deployment failed with status code: $response"
+            exit 1
+          fi
+      
+      - name: ⏳ Wait for deployment to start
+        run: sleep 10
+      
+      - name: ✅ Deployment Complete
+        run: echo "🎉 Backend deployment triggered on Render!"
