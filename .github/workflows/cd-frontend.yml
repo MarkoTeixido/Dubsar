@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '/**'
+      - 'frontend/**'
       - '.github/workflows/cd-frontend.yml'
   workflow_dispatch:
 
@@ -27,7 +27,6 @@ jobs:
         run: npm install -g vercel@latest
       
       - name: 🚀 Deploy to Vercel
-        working-directory: ./frontend
         run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}

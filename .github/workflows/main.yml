@@ -171,7 +171,7 @@ jobs:
   # ============================================
   # FRONTEND CD (solo en main, después de tests)
   # ============================================
-    frontend-deploy:
+      frontend-deploy:
     name: Frontend - Deploy to Vercel
     needs: [frontend-lint, frontend-build, frontend-docker]
     runs-on: ubuntu-latest
@@ -190,7 +190,6 @@ jobs:
         run: npm install -g vercel@latest
       
       - name: 🚀 Deploy to Vercel
-        working-directory: ./frontend
         run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
