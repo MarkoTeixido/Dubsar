@@ -1,6 +1,5 @@
 name: Backend CI
 
-# Se ejecuta en push a main/develop o en Pull Requests
 on:
   push:
     branches: [ main, develop ]
@@ -23,11 +22,9 @@ jobs:
         node-version: [22.x]
     
     steps:
-      # 1. Clonar el repositorio
       - name: 📦 Checkout code
         uses: actions/checkout@v4
       
-      # 2. Configurar Node.js
       - name: 🔧 Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -35,73 +32,47 @@ jobs:
           cache: 'npm'
           cache-dependency-path: backend/package-lock.json
       
-      # 3. Instalar dependencias
       - name: 📥 Install dependencies
         working-directory: ./backend
         run: npm ci
       
-      # 4. Ejecutar tests unitarios
       - name: 🧪 Run unit tests
         working-directory: ./backend
         run: npm run test:unit
         env:
           NODE_ENV: test
-      
-      # 5. Ejecutar tests de integración
-      - name: 🔗 Run integration tests
-        working-directory: ./backend
-        run: npm run test:integration
-        env:
-          NODE_ENV: test
-          # Variables de entorno mock para tests
+          # ⭐ Variables necesarias para que los tests funcionen
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
       
-      # 6. Generar reporte de cobertura
+      - name: 🔗 Run integration tests
+        working-directory: ./backend
+        run: npm run test:integration
+        env:
+          NODE_ENV: test
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      
       - name: 📊 Generate coverage report
         working-directory: ./backend
         run: npm run test:coverage
+        env:
+          NODE_ENV: test
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
       
-      # 7. Subir cobertura a GitHub
       - name: 📤 Upload coverage to GitHub
         uses: actions/upload-artifact@v4
         with:
           name: backend-coverage
           path: backend/coverage
-      
-      # 8. Comentar cobertura en PR (opcional)
-      - name: 💬 Comment coverage on PR
-        if: github.event_name == 'pull_request'
-        uses: romeovs/lcov-reporter-action@v0.3.1
-        with:
-          lcov-file: ./backend/coverage/lcov.info
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  lint:
-    name: Lint Backend
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: 📦 Checkout code
-        uses: actions/checkout@v4
-      
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-          cache: 'npm'
-          cache-dependency-path: backend/package-lock.json
-      
-      - name: 📥 Install dependencies
-        working-directory: ./backend
-        run: npm ci
-      
-      # Si agregas ESLint al backend, descomentar esto:
-      # - name: 🔍 Run linter
-      #   working-directory: ./backend
-      #   run: npm run lint
+        if: always()
 
   docker-build:
     name: Build Docker Image
