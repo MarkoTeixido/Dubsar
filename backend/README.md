@@ -1,149 +1,157 @@
-# 🚀 Dubsar AI - Backend
+<p align="center">
+  <a href="https://dubsarai.vercel.app/"><img src="https://i.imgur.com/npJju1C.png" height="128"></a>
+  <h2 align="center"><a href="https://dubsarai.vercel.app/">Dubsar AI - Backend</a></h2>
+  <p align="center">API REST potenciada por Google Gemini AI con autenticación y gestión de conversaciones<p>
+  <p align="center">
+    <a href="#-características">
+    	<img src="https://img.shields.io/badge/%E2%9C%A8-Características-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="características" />
+    </a>
+    <a href="#-api-endpoints">
+    	<img src="https://img.shields.io/badge/%F0%9F%93%A1-API%20Endpoints-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="api" />
+    </a>
+    <a href="#-testing">
+    	<img src="https://img.shields.io/badge/%F0%9F%A7%AA-Testing-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="testing" />
+    </a>
+    <a href="#-deployment">
+    	<img src="https://img.shields.io/badge/%F0%9F%9A%80-Deployment-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="deployment" />
+    </a>
+  </p>
+</p>
 
-Backend de la aplicación Dubsar AI, un chatbot inteligente potenciado por Google Gemini AI con autenticación, gestión de conversaciones y procesamiento de archivos.
+<br>
+
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🛠️ Stack Tecnológico
 
-- **Runtime**: Node.js 22.18.0
-- **Framework**: Express.js 5.1.0
-- **Base de datos**: PostgreSQL (Supabase)
-- **IA**: Google Gemini 2.5 Flash
-- **Autenticación**: Supabase Auth (JWT + OAuth)
-- **Testing**: Vitest
-- **Containerización**: Docker
+Backend moderno construido con tecnologías del ecosistema Node.js:
 
-## 📁 Estructura del Proyecto
+| Tecnología | Versión | Descripción |
+|-----------|---------|-------------|
+| **Node.js** | 22.18.0 | Runtime JavaScript de alto rendimiento |
+| **Express.js** | 5.1.0 | Framework web minimalista y flexible |
+| **PostgreSQL** | Latest | Base de datos relacional vía Supabase |
+| **Google Gemini** | 2.5 Flash | IA generativa de última generación |
+| **Supabase Auth** | Latest | Autenticación JWT + OAuth integrada |
+| **Vitest** | Latest | Framework de testing ultrarrápido |
+| **Docker** | Latest | Containerización y despliegue |
 
+![](https://i.imgur.com/waxVImv.png)
+
+## ✨ Características
+
+### 🎯 Core Features
+
+- **🤖 Integración con Gemini AI**: Modelo 2.5 Flash con streaming en tiempo real
+- **🔐 Autenticación Completa**: JWT + OAuth (Google) + recuperación de contraseña
+- **💬 Gestión de Conversaciones**: CRUD completo con historial persistente
+- **📎 Procesamiento de Archivos**: Upload y análisis de PDF, DOCX e imágenes
+- **⚡ Streaming SSE**: Respuestas de IA en tiempo real
+- **🛡️ Rate Limiting**: Límites configurables por tipo de usuario
+- **📊 Validación Robusta**: Sanitización y validación de todas las entradas
+
+### 🔒 Seguridad
+
+- ✅ Headers de seguridad (Helmet.js)
+- ✅ CORS configurado correctamente
+- ✅ Validación de entrada en todos los endpoints
+- ✅ Sanitización de datos SQL injection-proof
+- ✅ JWT con refresh tokens
+- ✅ Rate limiting anti-abuse
+
+![](https://i.imgur.com/waxVImv.png)
+
+## 📡 API Endpoints
+
+### Públicos
+
+```bash
+GET  /              # Información del servidor
+GET  /health        # Health check
+POST /chat          # Chat sin streaming
+POST /chat/stream   # Chat con streaming (SSE)
 ```
-backend/
-├── src/
-│   ├── app.js                 # Configuración de Express
-│   ├── config/                # Configuraciones (DB, Gemini)
-│   ├── controllers/           # Lógica de negocio
-│   ├── middlewares/           # Middlewares (auth, errores)
-│   ├── routes/                # Definición de rutas
-│   ├── services/              # Servicios (AI, archivos)
-│   └── utils/                 # Utilidades
-├── tests/
-│   ├── unit/                  # Tests unitarios
-│   ├── integration/           # Tests de integración
-│   └── setup/                 # Configuración de tests
-├── server.js                  # Punto de entrada
-├── package.json
-└── vitest.config.js
+
+### Autenticación
+
+```bash
+POST   /auth/register         # Registro de usuario
+POST   /auth/login            # Iniciar sesión
+POST   /auth/logout           # Cerrar sesión
+POST   /auth/refresh          # Refrescar token
+POST   /auth/forgot-password  # Recuperar contraseña
+POST   /auth/reset-password   # Resetear contraseña
+GET    /auth/me               # Perfil del usuario
+PATCH  /auth/profile          # Actualizar perfil
+DELETE /auth/account          # Eliminar cuenta
+GET    /auth/oauth/google     # OAuth Google
 ```
+
+### Conversaciones (🔒 Requiere autenticación)
+
+```bash
+POST   /conversations              # Crear conversación
+GET    /conversations              # Listar conversaciones
+GET    /conversations/:id/messages # Obtener mensajes
+PUT    /conversations/:id          # Actualizar título
+DELETE /conversations/:id          # Eliminar conversación
+```
+
+### Archivos
+
+```bash
+POST /files/upload   # Subir archivo (PDF, DOCX, imagen)
+GET  /files/status   # Estado de límites
+```
+
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🚀 Inicio Rápido
 
 ### Prerrequisitos
 
-- Node.js 22.18.0 o superior
-- npm 10.x
-- Cuenta de Supabase
-- API Key de Google Gemini AI
+- **Node.js**: >= 22.18.0
+- **npm**: >= 10.x
+- Cuenta en [Supabase](https://supabase.com)
+- API Key de [Google AI Studio](https://aistudio.google.com)
 
-### Instalación
+### 1️⃣ Instalación
 
 ```bash
-# Clonar el repositorio
+# Clonar repositorio
 git clone https://github.com/MarkoTeixido/Dubsar.git
 cd Dubsar/backend
 
 # Instalar dependencias
 npm install
-
-# Configurar variables de entorno
-cp .env.example .env
-# Editar .env con tus credenciales
 ```
 
-### Variables de Entorno
+### 2️⃣ Configuración
 
-Crea un archivo `.env` en la raíz de `backend/`:
+Crear archivo `.env`:
 
-```env
-# Servidor
-PORT=8000
-NODE_ENV=development
-FRONTEND_URL=http://localhost:3000
+![](https://i.imgur.com/V6gkvEY.png)
 
-# Google Gemini AI
-GOOGLE_API_KEY=tu_api_key_aqui
+**¿Dónde obtener credenciales?**
 
-# Supabase
-SUPABASE_URL=https://tu-proyecto.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key
-SUPABASE_ANON_KEY=tu_anon_key
-```
+- **Google AI**: [AI Studio](https://aistudio.google.com/app/apikey)
+- **Supabase**: Dashboard → Settings → API
 
-#### ¿Dónde obtener las credenciales?
-
-- **Google AI API Key**: [Google AI Studio](https://aistudio.google.com/app/apikey)
-- **Supabase**: [Supabase Dashboard](https://supabase.com/dashboard) → Tu Proyecto → Settings → API
-
-### Ejecutar en Desarrollo
+### 3️⃣ Ejecutar
 
 ```bash
-# Modo desarrollo con hot-reload
+# Desarrollo
 npm run dev
 
-# Servidor iniciará en http://localhost:8000
+# Servidor en http://localhost:8000
 ```
 
-### Ejecutar con Docker
-
-```bash
-# Desde la raíz del proyecto
-docker compose -f infra/docker/docker-compose.dev.yml up backend
-```
-
-## 📊 API Endpoints
-
-### Públicos
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/` | Información del servidor |
-| GET | `/health` | Estado del servidor |
-| POST | `/chat` | Chat sin streaming |
-| POST | `/chat/stream` | Chat con streaming (SSE) |
-
-### Autenticación
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/auth/register` | Registrar nuevo usuario |
-| POST | `/auth/login` | Iniciar sesión |
-| POST | `/auth/logout` | Cerrar sesión |
-| POST | `/auth/refresh` | Refrescar token |
-| POST | `/auth/forgot-password` | Recuperar contraseña |
-| POST | `/auth/reset-password` | Resetear contraseña |
-| GET | `/auth/me` | Perfil del usuario |
-| PATCH | `/auth/profile` | Actualizar perfil |
-| DELETE | `/auth/account` | Eliminar cuenta |
-| GET | `/auth/oauth/google` | OAuth con Google |
-
-### Conversaciones (Requiere autenticación)
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/conversations` | Crear nueva conversación |
-| GET | `/conversations` | Listar conversaciones del usuario |
-| GET | `/conversations/:id/messages` | Obtener mensajes de una conversación |
-| PUT | `/conversations/:id` | Actualizar título de conversación |
-| DELETE | `/conversations/:id` | Eliminar conversación |
-
-### Archivos
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/files/upload` | Subir archivo (PDF, DOCX, imagen) |
-| GET | `/files/status` | Estado de límites de archivos |
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🧪 Testing
 
 ```bash
-# Ejecutar todos los tests
+# Todos los tests
 npm test
 
 # Tests unitarios
@@ -152,85 +160,32 @@ npm run test:unit
 # Tests de integración
 npm run test:integration
 
-# Tests en modo watch
+# Modo watch
 npm run test:watch
 
-# Reporte de cobertura
+# Cobertura de código
 npm run test:coverage
 ```
 
-## 🔐 Características de Seguridad
+### 📊 Cobertura Actual
 
-- ✅ Autenticación JWT con Supabase
-- ✅ OAuth 2.0 con Google
-- ✅ Rate limiting para usuarios anónimos
-- ✅ Validación de entrada en todos los endpoints
-- ✅ CORS configurado
-- ✅ Headers de seguridad
-- ✅ Sanitización de datos
-
-## 📝 Límites y Restricciones
-
-### Usuarios Anónimos
-- **Mensajes por día**: 20
-- **Tamaño de archivos**: No permitido
-
-### Usuarios Autenticados
-- **Mensajes por día**: Ilimitados
-- **Tamaño máximo de archivo**: 10MB
-- **Archivos por día**: 50
-- **Formatos soportados**: PDF, DOCX, PNG, JPG, JPEG, WEBP
-
-## 🤖 Gemini AI
-
-El backend utiliza **Google Gemini 2.5 Flash** con las siguientes características:
-
-- Streaming de respuestas en tiempo real
-- Procesamiento de imágenes
-- Análisis de documentos (PDF, Word)
-- Contexto conversacional
-- Safety settings configurados
-
-## 🐛 Debugging
-
-```bash
-# Logs detallados
-DEBUG=* npm run dev
-
-# Ver conexiones de base de datos
-# Los logs muestran:
-# ✅ Supabase conectado
-# ✅ Gemini AI conectado
+```
+✓ 297 tests passing
+━━━━━━━━━━━━━━━━━━━
+Coverage: ~85-90%
 ```
 
-## 📦 Scripts Disponibles
-
-| Script | Descripción |
-|--------|-------------|
-| `npm start` | Inicia el servidor en producción |
-| `npm run dev` | Modo desarrollo con hot-reload |
-| `npm test` | Ejecuta todos los tests |
-| `npm run test:unit` | Tests unitarios |
-| `npm run test:integration` | Tests de integración |
-| `npm run test:coverage` | Reporte de cobertura |
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🚀 Deployment
 
 ### Render (Recomendado)
 
-1. Conecta tu repositorio a Render
-2. Configura las variables de entorno
-3. Deploy automático en cada push a `main`
-
-### Railway
-
-```bash
-# Instalar Railway CLI
-npm install -g @railway/cli
-
-# Deploy
-railway up
-```
+1. Conecta tu repositorio en [render.com](https://render.com)
+2. Configuración:
+   - **Root Directory**: `backend`
+3. Agrega variables de entorno
+4. Deploy
 
 ### Docker
 
@@ -242,30 +197,42 @@ docker build -f infra/docker/backend.Dockerfile -t dubsar-backend .
 docker run -p 8000:8000 --env-file .env dubsar-backend
 ```
 
-## 🤝 Contribución
+![](https://i.imgur.com/waxVImv.png)
+
+## 📁 Estructura del Proyecto
+
+![](https://i.imgur.com/SW7wQ1n.png)
+
+
+![](https://i.imgur.com/waxVImv.png)
+
+**Pasos para contribuir:**
 
 1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
+2. Crea tu branch (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add AmazingFeature'`)
+4. Push al branch (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-## 📄 Licencia
+![](https://i.imgur.com/waxVImv.png)
 
-Este proyecto está bajo la licencia MIT - ver el archivo [LICENSE](../LICENSE) para más detalles.
+## 📝 Scripts Disponibles
 
-## 👨‍💻 Autor
+| Script | Descripción |
+|--------|-------------|
+| `npm start` | Servidor de producción |
+| `npm run dev` | Desarrollo con hot-reload |
+| `npm test` | Ejecutar tests |
+| `npm run test:unit` | Tests unitarios |
+| `npm run test:integration` | Tests de integración |
+| `npm run test:coverage` | Reporte de cobertura |
 
-**Marko Teixido**
-- GitHub: [@MarkoTeixido](https://github.com/MarkoTeixido)
-- Email: teixido_marko@outlook.es
-
-## 🙏 Agradecimientos
-
-- Google Gemini AI
-- Supabase
-- Express.js Community
+![](https://i.imgur.com/waxVImv.png)
 
 ---
 
-**Versión**: 2.0.0 
+<div align="center">
+
+Hecho por [Marko Teixido](https://github.com/MarkoTeixido)
+
+</div>
