@@ -12,21 +12,27 @@ jobs:
   deploy:
     name: Deploy to Vercel Production
     runs-on: ubuntu-latest
-    # Solo deploy si estamos en main
     if: github.ref == 'refs/heads/main'
     
     steps:
       - name: 📦 Checkout code
         uses: actions/checkout@v4
       
-      - name: 🚀 Deploy to Vercel
-        uses: amondnet/vercel-action@v25
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-          working-directory: ./frontend
+          node-version: 22.x
+      
+      - name: 📥 Install Vercel CLI
+        run: npm install -g vercel@latest
+      
+      - name: 🚀 Deploy to Vercel
+        run: |
+          cd frontend
+          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       
       - name: ✅ Deployment Complete
         run: echo "🎉 Frontend deployed to production!"
