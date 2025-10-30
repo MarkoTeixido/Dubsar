@@ -1,7 +1,7 @@
 // backend/src/routes/healthRoutes.js
 import express from 'express';
 import os from 'os';
-import { metrics } from '../middleware/metrics.js';
+import { metrics } from '../middlewares/metrics.js';
 
 const router = express.Router();
 

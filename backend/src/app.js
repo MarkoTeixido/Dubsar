@@ -15,8 +15,8 @@ import healthRoutes from "./routes/healthRoutes.js";
 
 // Importar middlewares
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
-import { requestLogger } from "./middleware/logger.js";
-import { trackMetrics } from "./middleware/metrics.js"; 
+import { requestLogger } from "./middlewares/logger.js";
+import { trackMetrics } from "./middlewares/metrics.js"; 
 
 const app = express();
 
