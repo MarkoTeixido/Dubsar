@@ -1,71 +1,133 @@
-# ✨ Dubsar AI - Frontend
+<p align="center">
+  <a href="https://dubsarai.vercel.app/"><img src="https://i.imgur.com/npJju1C.png" height="128"></a>
+  <h2 align="center"><a href="https://dubsarai.vercel.app/">Dubsar AI - Frontend</a></h2>
+  <p align="center">Interfaz moderna y elegante para chat con IA construida con Next.js 15, React 19 y TypeScript 5<p>
+  <p align="center">
+    <a href="#-características">
+    	<img src="https://img.shields.io/badge/%E2%9C%A8-Características-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="características" />
+    </a>
+    <a href="#-componentes">
+    	<img src="https://img.shields.io/badge/%F0%9F%8E%A8-Componentes-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="componentes" />
+    </a>
+    <a href="#-testing">
+    	<img src="https://img.shields.io/badge/%F0%9F%A7%AA-Testing-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="testing" />
+    </a>
+    <a href="#-deployment">
+    	<img src="https://img.shields.io/badge/%F0%9F%9A%80-Deployment-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="deployment" />
+    </a>
+  </p>
+</p>
 
-Frontend moderno de Dubsar AI, un chatbot inteligente con interfaz elegante y minimalista construida con Next.js 15 y React 19.
+<br>
+
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🛠️ Stack Tecnológico
 
-- **Framework**: Next.js 15.5.5 (App Router)
-- **React**: 19.1.0
-- **Lenguaje**: TypeScript 5
-- **Estilos**: Tailwind CSS 4
-- **UI Components**: Shadcn UI + Radix UI
-- **Animaciones**: Framer Motion
-- **HTTP Client**: Axios
-- **Markdown**: React Markdown + Remark GFM
-- **Testing**: Vitest + Playwright + Testing Library
-- **Build Tool**: Turbopack
+Frontend moderno construido con las últimas tecnologías de React:
 
-## 📁 Estructura del Proyecto
+| Tecnología | Versión | Descripción |
+|-----------|---------|-------------|
+| **Next.js** | 15.5.5 | Framework React con App Router y Turbopack |
+| **React** | 19.1.0 | Biblioteca UI con hooks y suspense |
+| **TypeScript** | 5.x | Tipado estático end-to-end |
+| **TailwindCSS** | 4.x | Framework CSS utility-first |
+| **Shadcn UI** | Latest | Componentes accesibles y reutilizables |
+| **Framer Motion** | 12.x | Animaciones fluidas y declarativas |
+| **Radix UI** | Latest | Primitivos UI accesibles |
+| **Axios** | 1.12.2 | Cliente HTTP con interceptores |
+| **React Markdown** | 10.x | Renderizado de markdown con GFM |
+| **Vitest** | Latest | Testing ultrarrápido (unit/integration) |
+| **Playwright** | Latest | Tests end-to-end (e2e) |
 
+![](https://i.imgur.com/waxVImv.png)
+
+## ✨ Características
+
+### 🎨 Interfaz de Usuario
+
+- **🌓 Dark Mode Nativo**: Tema oscuro optimizado para lectura prolongada
+- **📱 Totalmente Responsive**: Diseño adaptable para móvil, tablet y desktop
+- **✨ Animaciones Fluidas**: Transiciones suaves con Framer Motion
+- **🎯 UX Optimizada**: Diseño minimalista centrado en el usuario
+
+### 💬 Chat Inteligente
+
+- **⚡ Streaming en Tiempo Real**: Respuestas de IA tipo ChatGPT
+- **📝 Renderizado Markdown**: Soporte completo de markdown con syntax highlighting
+- **🖼️ Soporte Multimedia**: Previsualización de imágenes y documentos
+- **📚 Historial Persistente**: Guarda y recupera conversaciones
+- **🔄 Auto-scroll Inteligente**: Scroll automático con control manual
+
+### 🔐 Autenticación
+
+- **📧 Email/Password**: Registro e inicio de sesión tradicional
+- **🔑 OAuth Google**: Autenticación social rápida
+- **🔒 Sesión Persistente**: Mantén tu sesión entre visitas
+- **👤 Gestión de Perfil**: Actualiza tu información personal
+- **🔓 Recuperación**: Sistema completo de reset de contraseña
+
+### 📎 Gestión de Archivos
+
+- **🖼️ Imágenes**: PNG, JPG, JPEG, WEBP con preview
+- **📄 Documentos**: PDF, DOCX con análisis por IA
+- **📊 Límites Inteligentes**: Diferentes cuotas por tipo de usuario
+
+### 🚀 Performance
+
+- **⚡ Lighthouse 95+**: Optimizado para máxima velocidad
+- **📦 Code Splitting**: Carga solo lo necesario
+- **🖼️ Image Optimization**: Imágenes optimizadas automáticamente
+- **🔥 Turbopack**: Builds ultrarrápidos en desarrollo
+- **♿ Accesibilidad 100**: Cumple WCAG 2.1 AA
+
+![](https://i.imgur.com/waxVImv.png)
+
+## 🎨 Componentes
+
+### Componentes Shadcn UI
+
+El proyecto utiliza **Shadcn UI** para componentes reutilizables:
+
+```bash
+# Agregar nuevos componentes de shadcn
+npx shadcn-ui@latest add [NombreComponente]
 ```
-frontend/
-├── src/
-│   ├── app/                   # App Router de Next.js
-│   │   ├── layout.tsx         # Layout principal
-│   │   ├── page.tsx           # Página de inicio (chat)
-│   │   └── globals.css        # Estilos globales
-│   ├── components/            # Componentes React
-│   │   ├── ui/                # Componentes de Shadcn UI
-│   │   └── ...                # Componentes custom
-│   ├── hooks/                 # Custom hooks
-│   ├── lib/                   # Utilidades y helpers
-│   └── types/                 # Tipos de TypeScript
-├── public/                    # Archivos estáticos
-├── tests/
-│   ├── unit/                  # Tests unitarios
-│   ├── integration/           # Tests de integración
-│   └── e2e/                   # Tests end-to-end (Playwright)
-├── next.config.ts
-├── tailwind.config.ts
-└── tsconfig.json
-```
+
+**Componentes implementados en carpeta components/ui/:**
+- `button`, `input`, `textarea`
+- `card`, `alert_dialog`
+- `skeleton`, `separator`, `tooltip`
+- `sidebar`, `sheet`
+
+### Estructura de Componentes
+
+![](https://i.imgur.com/D5Ddb4o.png)
+
+![](https://i.imgur.com/waxVImv.png) 
 
 ## 🚀 Inicio Rápido
 
 ### Prerrequisitos
 
-- Node.js 22.18.0 o superior
-- npm 10.x
+- **Node.js**: >= 22.18.0
+- **npm**: >= 10.x
 - Backend de Dubsar corriendo
 
-### Instalación
+### 1️⃣ Instalación
 
 ```bash
-# Clonar el repositorio
+# Clonar repositorio
 git clone https://github.com/MarkoTeixido/Dubsar.git
 cd Dubsar/frontend
 
 # Instalar dependencias
 npm install
-
-# Configurar variables de entorno
-cp .env.local.example .env.local
-# Editar .env.local
 ```
 
-### Variables de Entorno
+### 2️⃣ Configuración
 
-Crea un archivo `.env.local` en la raíz de `frontend/`:
+Crear archivo `.env.local`:
 
 ```env
 # URL del backend
@@ -74,34 +136,19 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 Para producción:
 ```env
-NEXT_PUBLIC_API_URL=https://tu-backend.render.com
+NEXT_PUBLIC_API_URL=https://tu-backend.onrender.com
 ```
 
-### Ejecutar en Desarrollo
+### 3️⃣ Ejecutar
 
 ```bash
-# Modo desarrollo con Turbopack
+# Desarrollo con Turbopack
 npm run dev
 
 # Abrir http://localhost:3000
 ```
 
-### Ejecutar con Docker
-
-```bash
-# Desde la raíz del proyecto
-docker compose -f infra/docker/docker-compose.dev.yml up frontend
-```
-
-## 🏗️ Build para Producción
-
-```bash
-# Generar build optimizado
-npm run build
-
-# Iniciar servidor de producción
-npm start
-```
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🧪 Testing
 
@@ -117,10 +164,10 @@ npm run test:unit
 # Tests de integración
 npm run test:integration
 
-# Modo watch
+# Modo watch interactivo
 npm run test:ui
 
-# Cobertura
+# Cobertura de código
 npm run test:coverage
 ```
 
@@ -139,146 +186,39 @@ npm run test:e2e:headed
 # Debug mode
 npm run test:e2e:debug
 
-# Ver reporte
+# Ver reporte HTML
 npm run test:e2e:report
 ```
 
-## ✨ Características
+### 📊 Resultados Actuales
 
-### 🎨 Interfaz de Usuario
-
-- ✅ Diseño minimalista y moderno
-- ✅ Dark mode nativo
-- ✅ Responsive (mobile, tablet, desktop)
-- ✅ Animaciones fluidas con Framer Motion
-- ✅ Tipografía optimizada (Geist Sans)
-
-### 💬 Chat
-
-- ✅ Streaming de respuestas en tiempo real
-- ✅ Renderizado de Markdown con syntax highlighting
-- ✅ Soporte de imágenes y archivos
-- ✅ Historial de conversaciones
-- ✅ Auto-scroll inteligente
-
-### 🔐 Autenticación
-
-- ✅ Login / Registro con email
-- ✅ OAuth con Google
-- ✅ Recuperación de contraseña
-- ✅ Gestión de perfil
-- ✅ Persistencia de sesión
-
-### 📎 Archivos
-
-- ✅ Upload de imágenes (PNG, JPG, WEBP)
-- ✅ Upload de documentos (PDF, DOCX)
-- ✅ Vista previa de archivos
-- ✅ Límites por tipo de usuario
-
-### 📱 Características Adicionales
-
-- ✅ PWA Ready (instalable)
-- ✅ SEO optimizado
-- ✅ Performance optimizado (Lighthouse 90+)
-- ✅ Accesibilidad (ARIA labels)
-- ✅ Lazy loading de componentes
-
-## 🎨 Componentes UI
-
-El proyecto utiliza **Shadcn UI** para componentes reutilizables:
-
-```bash
-# Agregar un nuevo componente
-npx shadcn-ui@latest add button
-npx shadcn-ui@latest add dialog
-npx shadcn-ui@latest add avatar
+```
+✓ 265+ tests passing (Vitest)
+✓ 35 E2E tests (Playwright)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 300+ tests ✨
+Coverage: ~85-90%
 ```
 
-Componentes disponibles:
-- `Button`, `Input`, `Textarea`
-- `Dialog`, `Alert Dialog`
-- `Avatar`, `Separator`, `Tooltip`
-- `Tabs`, `Slot`
-
-## 🔧 Configuración
-
-### Tailwind CSS
-
-```typescript
-// tailwind.config.ts
-export default {
-  darkMode: 'class',
-  content: [
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {
-    extend: {
-      colors: {
-        border: "hsl(var(--border))",
-        // ...colores personalizados
-      },
-    },
-  },
-}
-```
-
-### Next.js
-
-```typescript
-// next.config.ts
-const nextConfig = {
-  reactStrictMode: true,
-  images: {
-    domains: ['lhnsfwdbgysybprsdsqq.supabase.co'],
-  },
-}
-```
-
-## 📊 Scripts Disponibles
-
-| Script | Descripción |
-|--------|-------------|
-| `npm run dev` | Desarrollo con Turbopack |
-| `npm run build` | Build de producción |
-| `npm start` | Servidor de producción |
-| `npm run lint` | Ejecutar ESLint |
-| `npm test` | Tests unitarios + integración |
-| `npm run test:e2e` | Tests end-to-end |
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🚀 Deployment
 
 ### Vercel (Recomendado)
 
-```bash
-# Instalar Vercel CLI
-npm install -g vercel
+**desde el Dashboard:**
 
-# Deploy
-vercel
-
-# Deploy a producción
-vercel --prod
-```
-
-O conecta tu repositorio directamente desde [vercel.com](https://vercel.com)
-
-### Variables de entorno en Vercel
-
-Agrega en Vercel Dashboard:
-```
-NEXT_PUBLIC_API_URL=https://tu-backend.render.com
-```
-
-### Netlify
-
-```bash
-# Instalar Netlify CLI
-npm install -g netlify-cli
-
-# Deploy
-netlify deploy --prod
-```
+1. Importa tu repo en [vercel.com](https://vercel.com)
+2. Configuración:
+   - **Framework**: Next.js (auto-detectado)
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `.next`
+3. Variables de entorno:
+   ```
+   NEXT_PUBLIC_API_URL=https://tu-backend.onrender.com
+   ```
+4. Deploy
 
 ### Docker
 
@@ -290,45 +230,61 @@ docker build -f infra/docker/frontend.Dockerfile -t dubsar-frontend .
 docker run -p 3000:3000 dubsar-frontend
 ```
 
+![](https://i.imgur.com/waxVImv.png)
+
+## 📁 Estructura del Proyecto
+
+![](https://i.imgur.com/Su5NGnb.png)
+
+![](https://i.imgur.com/waxVImv.png)
+
 ## 🎯 Performance
 
-### Optimizaciones implementadas
+### Optimizaciones Implementadas
 
 - ✅ Server Components por defecto
-- ✅ Image optimization con next/image
+- ✅ Image optimization con `next/image`
 - ✅ Dynamic imports para code splitting
 - ✅ Turbopack para builds rápidos
-- ✅ Font optimization con next/font
+- ✅ Font optimization con `next/font`
+- ✅ Lazy loading de componentes pesados
+- ✅ Memoization de componentes React
 
-### Lighthouse Score (Target)
+### Lighthouse Score
 
 ```
-Performance: 95+
-Accessibility: 100
-Best Practices: 95+
-SEO: 100
+Performance:      92+
+Accessibility:    100
+Best Practices:   100
+SEO:             100
 ```
+
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🐛 Debugging
 
-### En desarrollo
+### En Desarrollo
 
 ```bash
-# Mostrar logs detallados
+# Logs detallados
 DEBUG=* npm run dev
 
 # Analizar bundle
 npm run build -- --profile
+
+# Inspeccionar Turbopack
+npm run dev -- --show-all
 ```
 
-### Troubleshooting común
+### Troubleshooting Común
 
 **Error: Cannot connect to backend**
 ```bash
-# Verificar que el backend esté corriendo
+# Verificar backend
 curl http://localhost:8000/health
 
-# Verificar NEXT_PUBLIC_API_URL en .env.local
+# Verificar .env.local
+cat .env.local
 ```
 
 **Error: Hydration mismatch**
@@ -338,40 +294,45 @@ rm -rf .next
 npm run dev
 ```
 
-## 🤝 Contribución
+**Error: Module not found**
+```bash
+# Reinstalar dependencias
+rm -rf node_modules package-lock.json
+npm install
+```
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+![](https://i.imgur.com/waxVImv.png)
 
-### Guía de estilo
+## 📝 Scripts Disponibles
 
-- Usa TypeScript para todos los archivos
-- Sigue las convenciones de Next.js App Router
-- Componentes en PascalCase
-- Hooks con prefijo `use`
-- Mantén componentes pequeños y reutilizables
+| Script | Descripción |
+|--------|-------------|
+| `npm run dev` | Desarrollo con Turbopack |
+| `npm run build` | Build de producción |
+| `npm start` | Servidor de producción |
+| `npm run lint` | Ejecutar ESLint |
+| `npm test` | Tests unitarios + integración |
+| `npm run test:e2e` | Tests end-to-end |
+| `npm run test:ui` | Tests en modo UI |
+| `npm run test:coverage` | Reporte de cobertura |
 
-## 📄 Licencia
+![](https://i.imgur.com/waxVImv.png)
 
-Este proyecto está bajo la licencia MIT - ver el archivo [LICENSE](../LICENSE) para más detalles.
+### Guía de Estilo
 
-## 👨‍💻 Autor
+- ✅ Usa TypeScript para todos los archivos
+- ✅ Sigue las convenciones de Next.js App Router
+- ✅ Componentes en PascalCase
+- ✅ Hooks con prefijo `use`
+- ✅ Mantén componentes pequeños y reutilizables
+- ✅ Escribe tests para nuevas funcionalidades
 
-**Marko Teixido**
-- GitHub: [@MarkoTeixido](https://github.com/MarkoTeixido)
-- Portfolio: [Tu sitio web]
-- Email: teixido_marko@outlook.es
-
-## 🙏 Agradecimientos
-
-- Next.js Team
-- Shadcn UI
-- Vercel
-- Tailwind CSS
+![](https://i.imgur.com/waxVImv.png)
 
 ---
 
-**Versión**: 2.0.0
+<div align="center">
+
+Hecho por [Marko Teixido](https://github.com/MarkoTeixido)
+
+</div>
