@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # BACKEND (Node.js + Express)
+  # ============================================
+  backend:
+    build:
+      context: ../../  # Desde la raíz del proyecto
+      dockerfile: infra/docker/backend.Dockerfile
+      target: development  # Etapa de desarrollo
+    container_name: dubsar-backend-dev
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=development
+      - PORT=8000
+      # Variables de entorno desde archivo .env
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - FRONTEND_URL=http://localhost:3000
+    volumes:
+      # Montar código en vivo (hot-reload)
+      - ../../backend:/app
+      # Ignorar node_modules del host
+      - /app/node_modules
+    networks:
+      - dubsar-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================
+  # FRONTEND (Next.js)
+  # ============================================
+  frontend:
+    build:
+      context: ../../
+      dockerfile: infra/docker/frontend.Dockerfile
+      target: development
+    container_name: dubsar-frontend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    volumes:
+      # Montar código en vivo
+      - ../../frontend:/app
+      - /app/node_modules
+      - /app/.next  # Ignorar cache de Next.js
+    networks:
+      - dubsar-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  dubsar-network:
+    driver: bridge

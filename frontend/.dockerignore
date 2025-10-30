@@ -1,0 +1,18 @@
+# Frontend - Archivos a ignorar
+node_modules
+.next
+out
+npm-debug.log
+.env
+.env.*
+.env.local
+*.log
+.git
+.gitignore
+coverage
+.vscode
+.idea
+*.md
+tests
+playwright-report
+.DS_Store

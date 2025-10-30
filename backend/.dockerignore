@@ -1,0 +1,14 @@
+# Backend - Archivos a ignorar al construir imagen
+node_modules
+npm-debug.log
+.env
+.env.*
+*.log
+.git
+.gitignore
+coverage
+.vscode
+.idea
+*.md
+tests
+.DS_Store
