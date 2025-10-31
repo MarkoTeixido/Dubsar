@@ -67,7 +67,7 @@ Pipeline completo que ejecuta CI y CD para frontend y backend.
 Monitoreo automático del estado del backend en producción.
 
 **Triggers:**
-- Cada hora (`cron: 0 * * * *`)
+- Cada 12 horas (`cron: 0 */12 * * *`)
 - Ejecución manual
 
 **Verificaciones:**
