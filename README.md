@@ -1,383 +1,430 @@
-<div align="center">
+<p align="center">
+  <a href="https://dubsarai.vercel.app/"><img src="https://i.imgur.com/npJju1C.png" height="128"></a>
+  <h2 align="center"><a href="https://dubsarai.vercel.app/">Dubsar AI</a></h2>
+  <p align="center">App web de asistencia conversacional inteligente, potenciada por IA generativa y diseñada para ofrecer respuestas en tiempo real a usuarios autenticados o anónimos.<p>
+  <p align="center">
+    <a href="https://dubsarai.vercel.app/">
+    	<img src="https://img.shields.io/badge/%F0%9F%8C%90-Demo_en_Vivo-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="demo" />
+    </a>
+    <a href="#-características">
+    	<img src="https://img.shields.io/badge/%E2%9C%A8-Características-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="características" />
+    </a>
+    <a href="#-tecnologías">
+    	<img src="https://img.shields.io/badge/%F0%9F%9A%80-Stack-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="stack" />
+    </a>
+    <a href="#-instalación">
+    	<img src="https://img.shields.io/badge/%F0%9F%93%A6-Instalación-0a0a0a.svg?style=flat&colorA=0a0a0a" alt="instalación" />
+    </a>
+  </p>
+</p>
 
-# 🤖 Dubsar AI
+<br>
 
-### Plataforma de Chat Inteligente con IA
+![](https://i.imgur.com/waxVImv.png)
 
-*Chat conversacional potenciado por Google Gemini con soporte para usuarios anónimos y autenticados*
+## 📝 Sobre el Proyecto
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.5.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.1.0-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase)](https://supabase.com/)
-[![Tests](https://img.shields.io/badge/Tests-562%20passing-success?style=for-the-badge&logo=vitest)](https://vitest.dev/)
+**Dubsar AI** es una aplicación web full-stack que permite interactuar con Google Gemini AI a través de una interfaz moderna y minimalista. Desarrollada como proyecto personal para demostrar habilidades en desarrollo web moderno, arquitectura de software y buenas prácticas de programación.
 
-[🚀 Demo en Vivo](#) • [📖 Documentación](#características) • [🐛 Reportar Bug](https://github.com/marko-github/Dubsar/issues) • [✨ Solicitar Feature](https://github.com/marko-github/Dubsar/issues)
+### 🎯 Objetivo
 
-<img src="https://via.placeholder.com/800x400/0F172A/10B981?text=Dubsar+AI+Screenshot" alt="Dubsar AI Preview" width="100%" />
+Crear una plataforma de chat con IA que sea:
+- **Rápida**: Respuestas en streaming en tiempo real
+- **Segura**: Autenticación robusta y protección de datos
+- **Escalable**: Arquitectura modular y bien estructurada
+- **Testeable**: Alta cobertura de tests automatizados
+- **Profesional**: Código limpio y documentado
 
-</div>
+### 🖼️ Preview
+<p align="center">
+   <img src="https://i.imgur.com/v5sS2AK.png" height="600" width="750">
+</p>
 
----
-
-## 📋 Tabla de Contenidos
-
-- [✨ Características](#-características)
-- [🏗️ Arquitectura](#️-arquitectura)
-- [🚀 Stack Tecnológico](#-stack-tecnológico)
-- [📦 Instalación](#-instalación)
-- [🔧 Configuración](#-configuración)
-- [🧪 Testing](#-testing)
-- [🚀 Deployment](#-deployment)
-- [📊 Métricas del Proyecto](#-métricas-del-proyecto)
-- [🤝 Contribuir](#-contribuir)
-- [📝 Licencia](#-licencia)
-
----
+![](https://i.imgur.com/waxVImv.png)
 
 ## ✨ Características
 
-### 🎯 Características Principales
+### 🤖 Inteligencia Artificial
 
-- **🤖 Chat con IA Avanzada**: Integración con Google Gemini 2.0 Flash
-- **👤 Autenticación Completa**: Email/Password + OAuth (Google)
-- **🌐 Chat Anónimo**: Usa la plataforma sin necesidad de registro
-- **💬 Conversaciones Persistentes**: Guarda y retoma tus chats
-- **📁 Upload de Archivos**: Soporta imágenes y documentos
-- **⚡ Streaming de Respuestas**: Respuestas en tiempo real
-- **🎨 UI/UX Moderna**: Diseño limpio con Shadcn UI y Framer Motion
-- **📱 Responsive**: Optimizado para móvil, tablet y desktop
-- **♿ Accesible**: Cumple estándares ARIA y WCAG
-- **🔒 Seguro**: JWT, RLS en PostgreSQL, validaciones
+- **Google Gemini 2.5 Flash**: Modelo de IA de última generación
+- **Streaming de Respuestas**: Respuestas en tiempo real tipo ChatGPT
+- **Análisis de Imágenes**: Procesamiento y comprensión de imágenes
+- **Procesamiento de Documentos**: Análisis de PDFs y archivos Word
+- **Contexto Conversacional**: Mantiene el hilo de la conversación
 
-### 🛠️ Características Técnicas
+### 🔐 Autenticación y Usuarios
 
-- **562+ Tests Automatizados**: Unit, Integration y E2E
-- **~85-90% Code Coverage**: Alta cobertura de código
-- **CI/CD Completo**: GitHub Actions + Deploy automático
-- **Type Safety**: TypeScript en todo el stack
-- **API RESTful**: Backend con Express.js
-- **Real-time Updates**: Sincronización en tiempo real
-- **Error Handling**: Manejo robusto de errores
-- **Logging**: Sistema de logs estructurados
+- **Modo Anónimo**: Usa la app sin necesidad de registro (límite: 20 mensajes/día)
+- **Registro Email/Password**: Autenticación tradicional con Supabase
+- **OAuth Google**: Login rápido con cuenta de Google
+- **Gestión de Sesión**: JWT tokens con refresh automático
+- **Perfiles de Usuario**: Actualización de datos personales
 
----
+### 💬 Gestión de Conversaciones
+
+- **Múltiples Chats**: Crea y organiza diferentes conversaciones
+- **Persistencia**: Guarda todo tu historial de chats
+- **Títulos Personalizados**: Renombra tus conversaciones
+- **Eliminación**: Borra conversaciones individuales
+- **Sincronización**: Accede a tus chats desde cualquier dispositivo
+
+### 📎 Manejo de Archivos
+
+- **Upload de Imágenes**: PNG, JPG, JPEG, WEBP
+- **Documentos**: PDF y DOCX
+- **Límites Inteligentes**: 10MB por archivo, 50 archivos/día para usuarios registrados
+- **Vista Previa**: Previsualiza archivos antes de enviar
+- **Almacenamiento Seguro**: Supabase Storage con URLs firmadas
+
+### 🎨 Interfaz de Usuario
+
+- **Diseño Minimalista**: Inspirado en las mejores apps de IA
+- **Dark Mode**: Tema oscuro optimizado para lectura prolongada
+- **Responsive**: Funciona perfectamente en móvil, tablet y desktop
+- **Animaciones Fluidas**: Transiciones con Framer Motion
+- **Markdown Rendering**: Código, tablas, listas y más
+- **Accesibilidad**: Cumple estándares WCAG
+
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🏗️ Arquitectura
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                         FRONTEND                            │
-│  Next.js 15 + React 19 + TypeScript + TailwindCSS          │
-│  • Páginas: Landing, Chat, Auth, Dashboard                 │
-│  • Components: Shadcn UI + Radix UI                         │
-│  • State: React Hooks                                       │
-│  • Animations: Framer Motion                                │
-└────────────────────┬────────────────────────────────────────┘
-                     │ HTTP/REST
-                     │ axios
-┌────────────────────▼────────────────────────────────────────┐
-│                         BACKEND                             │
-│  Node.js + Express.js + JavaScript                          │
-│  • Routes: /auth, /chat, /conversations, /files            │
-│  • Middlewares: Auth, Validation, Error Handling           │
-│  • Services: Business Logic Layer                          │
-└──────────┬──────────────────────┬───────────────────────────┘
-           │                      │
-           │                      │
-    ┌──────▼──────┐        ┌─────▼──────┐
-    │  Supabase   │        │   Gemini   │
-    │  PostgreSQL │        │  API 2.0   │
-    │  + Auth     │        │            │
-    │  + Storage  │        └────────────┘
-    └─────────────┘
-```
+<p align="center">
+   <img src="https://i.imgur.com/IuwRYXF.png">
+</p>
 
----
+### 🔄 Flujo de una Conversación
 
-## 🚀 Stack Tecnológico
+<p align="center">
+   <img src="https://i.imgur.com/ZCNX88n.png">
+</p>
+
+
+![](https://i.imgur.com/waxVImv.png)
+
+## 🚀 Tecnologías
 
 ### Frontend
 
-| Tecnología | Versión | Descripción |
-|-----------|---------|-------------|
-| **Next.js** | 15.5.5 | Framework React con SSR y Turbopack |
-| **React** | 19.1.0 | Biblioteca UI con hooks y suspense |
-| **TypeScript** | 5.x | Tipado estático |
+| Tecnología | Versión | Uso |
+|-----------|---------|-----|
+| **Next.js** | 15.5.5 | Framework React con App Router y SSR |
+| **React** | 19.1.0 | Biblioteca UI con hooks modernos |
+| **TypeScript** | 5.x | Tipado estático para mayor seguridad |
 | **TailwindCSS** | 4.x | Estilos utility-first |
-| **Shadcn UI** | Latest | Componentes accesibles |
-| **Framer Motion** | 12.x | Animaciones fluidas |
-| **Radix UI** | Latest | Primitivos UI accesibles |
+| **Shadcn UI** | Latest | Componentes accesibles pre-construidos |
+| **Framer Motion** | 12.x | Animaciones declarativas |
+| **Radix UI** | Latest | Primitivos UI sin estilos |
 | **Axios** | 1.12.2 | Cliente HTTP |
 | **React Markdown** | 10.x | Renderizado de markdown |
 
 ### Backend
 
-| Tecnología | Versión | Descripción |
-|-----------|---------|-------------|
-| **Node.js** | 20.x | Runtime JavaScript |
-| **Express.js** | Latest | Framework web minimalista |
-| **Supabase** | Latest | BaaS con PostgreSQL |
-| **Google Gemini** | 2.0 Flash | IA generativa |
-| **Multer** | Latest | Upload de archivos |
-| **CORS** | Latest | Cross-Origin Resource Sharing |
+| Tecnología | Versión | Uso |
+|-----------|---------|-----|
+| **Node.js** | 22.18.0 | Runtime JavaScript |
+| **Express.js** | 5.1.0 | Framework web minimalista |
+| **Supabase** | 2.75.0 | BaaS (Auth, DB, Storage) |
+| **Google Generative AI** | 0.24.1 | SDK de Gemini AI |
+| **Multer** | 2.0.2 | Middleware para file uploads |
+| **PDF Parse** | 2.3.8 | Extracción de texto de PDFs |
+| **Mammoth** | 1.11.0 | Conversión de DOCX a HTML |
+| **Pino** | 10.1.0 | Logger de alto rendimiento |
 
 ### Testing
 
-| Herramienta | Tests | Cobertura |
-|------------|-------|-----------|
-| **Vitest** | 527 | ~85% |
-| **Playwright** | 35 | E2E completo |
-| **Testing Library** | ✓ | React components |
+| Herramienta | Tests | Uso |
+|------------|-------|-----|
+| **Vitest** | 527 | Tests unitarios e integración |
+| **Playwright** | 35 | Tests end-to-end |
+| **Testing Library** | ✓ | Testing de componentes React |
+| **Supertest** | ✓ | Testing de API REST |
+
+**Cobertura total**: +90% del código
 
 ### DevOps
 
 | Servicio | Uso |
 |----------|-----|
-| **Vercel** | Frontend hosting |
-| **Render** | Backend hosting |
-| **GitHub Actions** | CI/CD |
-| **Supabase** | Database + Auth |
+| **Vercel** | Hosting del frontend |
+| **Render** | Hosting del backend |
+| **GitHub Actions** | CI/CD automático |
+| **Docker** | Containerización |
+| **Supabase** | Base de datos y autenticación |
 
----
+![](https://i.imgur.com/waxVImv.png)
 
 ## 📦 Instalación
 
 ### Prerequisitos
 
-- **Node.js**: >= 20.x
-- **npm**: >= 10.x
-- **Git**: >= 2.x
-- Cuenta en [Supabase](https://supabase.com)
-- API Key de [Google AI Studio](https://aistudio.google.com)
+- Node.js >= 22.18.0
+- npm >= 10.x
+- Cuenta en [Supabase](https://supabase.com) (gratis)
+- API Key de [Google AI Studio](https://aistudio.google.com) (gratis)
 
-### 1️⃣ Clonar el Repositorio
+### Opción 1: Setup Automático (Recomendado)
+
+**Linux/macOS:**
+```bash
+git clone https://github.com/MarkoTeixido/Dubsar.git
+cd Dubsar
+chmod +x infra/scripts/setup-dev.sh
+./infra/scripts/setup-dev.sh
+```
+
+**Windows:**
+```powershell
+git clone https://github.com/MarkoTeixido/Dubsar.git
+cd Dubsar
+.\infra\scripts\setup-dev.ps1
+```
+
+El script automáticamente:
+- ✅ Verifica prerequisitos
+- ✅ Instala dependencias
+- ✅ Crea archivos `.env`
+- ✅ Muestra próximos pasos
+
+### Opción 2: Setup Manual
+
+<details>
+<summary><b>Ver instrucciones paso a paso</b></summary>
+
+#### 1. Clonar el Repositorio
 
 ```bash
-git clone https://github.com/marko-github/Dubsar.git
+git clone https://github.com/MarkoTeixido/Dubsar.git
 cd Dubsar
 ```
 
-### 2️⃣ Instalar Frontend
+#### 2. Instalar Dependencias
 
+**Backend:**
 ```bash
-cd frontend
+cd backend
 npm install
 ```
 
-### 3️⃣ Instalar Backend
-
+**Frontend:**
 ```bash
-cd ../backend
+cd ../frontend
 npm install
 ```
 
----
+#### 3. Configurar Variables de Entorno
 
-## 🔧 Configuración
+**Backend** - Crear `backend/.env`:
 
-### Frontend Environment Variables
+![](https://i.imgur.com/V6gkvEY.png)
 
-Crear `frontend/.env.local`:
+**Frontend** - Crear `frontend/.env.local`:
 
-```bash
-# API Backend
+```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
-### Backend Environment Variables
+#### 4. Obtener Credenciales
 
-Crear `backend/.env`:
-
-```bash
-# Server
-PORT=8000
-
-# Supabase
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-
-# Google Gemini
-GOOGLE_API_KEY=your-gemini-api-key
-```
-
-### 📋 Obtener Credenciales
+**Google Gemini AI:**
+1. Ir a [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Click en "Get API Key"
+3. Crear o seleccionar un proyecto
+4. Copiar la API Key
 
 **Supabase:**
-1. Ir a [supabase.com](https://supabase.com)
+1. Crear cuenta en [supabase.com](https://supabase.com)
 2. Crear nuevo proyecto
-3. Ir a Settings > API
-4. Copiar: URL, anon key, service_role key
+3. Ir a Settings → API
+4. Copiar: URL del proyecto, `anon` key, `service_role` key
 
-**Google Gemini:**
-1. Ir a [aistudio.google.com](https://aistudio.google.com)
-2. Click en "Get API Key"
-3. Crear nuevo proyecto o usar existente
-4. Copiar API Key
+#### 5. Ejecutar en Desarrollo
 
----
-
-## 🚀 Ejecutar en Desarrollo
-
-### Terminal 1: Backend
-
+**Terminal 1 - Backend:**
 ```bash
 cd backend
 npm run dev
+# Servidor en http://localhost:8000
 ```
 
-Backend corriendo en: `http://localhost:8000`
-
-### Terminal 2: Frontend
-
+**Terminal 2 - Frontend:**
 ```bash
 cd frontend
 npm run dev
+# Aplicación en http://localhost:3000
 ```
 
-Frontend corriendo en: `http://localhost:3000`
+</details>
 
-### Verificar Funcionamiento
+### Opción 3: Docker
 
-- **Frontend**: http://localhost:3000
-- **Backend Health**: http://localhost:8000/health
-- **Backend API**: http://localhost:8000
+```bash
+# Desde la raíz del proyecto
+docker compose -f infra/docker/docker-compose.dev.yml up
 
----
+# Acceder a:
+# Frontend: http://localhost:3000
+# Backend: http://localhost:8000
+```
+
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🧪 Testing
 
-### Frontend Tests
+Este proyecto cuenta con **562+ tests automatizados** con ~85-90% de cobertura:
 
-```bash
-cd frontend
-
-# Unit tests
-npm run test:unit
-
-# Integration tests
-npm run test:integration
-
-# E2E tests
-npm run test:e2e
-
-# Coverage
-npm run test:coverage
-```
-
-### Backend Tests
+### Backend (297 tests)
 
 ```bash
 cd backend
-
-# Unit tests
-npm run test:unit
-
-# Integration tests
-npm run test:integration
 
 # Todos los tests
 npm test
 
-# Coverage
+# Solo unitarios
+npm run test:unit
+
+# Solo integración
+npm run test:integration
+
+# Con coverage
 npm run test:coverage
 ```
 
-### 📊 Resultados Actuales
+**Tests incluyen:**
+- ✅ Endpoints de autenticación
+- ✅ CRUD de conversaciones
+- ✅ Integración con Gemini AI
+- ✅ Upload de archivos
+- ✅ Middlewares de seguridad
+- ✅ Manejo de errores
+
+### Frontend (265+ tests)
+
+```bash
+cd frontend
+
+# Tests unitarios e integración
+npm test
+
+# Tests E2E con Playwright
+npm run test:e2e
+
+# Coverage completo
+npm run test:coverage
+```
+
+**Tests incluyen:**
+- ✅ Componentes UI
+- ✅ Hooks personalizados
+- ✅ Integración con API
+- ✅ Flujos de autenticación
+- ✅ E2E de usuario completo
+
+### Resultados
 
 ```
-Frontend:  265+ tests passing
-Backend:   297 tests passing
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TOTAL:     562+ tests passing ✨
-Cobertura: ~85-90%
+Backend:   297 tests passing  ✓
+Frontend:  265+ tests passing ✓
+E2E:       35 tests passing   ✓
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL:     562+ tests         ✨
+Coverage:  +90%             📊
 ```
 
----
+![](https://i.imgur.com/waxVImv.png)
+
+## 📊 Estructura del Proyecto
+
+![](https://i.imgur.com/lLge2LG.png)
+
+
+![](https://i.imgur.com/waxVImv.png)
 
 ## 🚀 Deployment
 
-### Vercel (Frontend)
+### Aplicación Desplegada
 
-1. Push a GitHub
-2. Importar repo en [vercel.com](https://vercel.com)
-3. Configurar:
-   - Root Directory: `frontend`
-   - Framework: Next.js (auto-detectado)
-   - Variables de entorno:
-     ```
-     NEXT_PUBLIC_API_URL=https://tu-backend.onrender.com
-     ```
-4. Deploy ✅
+- **Frontend**: [dubsarai.vercel.app](https://dubsarai.vercel.app/)
+- **Backend**: Render.com (URL privada)
 
-### Render (Backend)
+### CI/CD Pipeline
 
-1. Crear Web Service en [render.com](https://render.com)
-2. Conectar repo: `marko-github/Dubsar`
-3. Configurar:
-   - Root Directory: `backend`
-   - Build Command: `npm install`
-   - Start Command: `npm start`
-   - Variables de entorno (ver arriba)
-4. Deploy ✅
+El proyecto incluye **GitHub Actions** que automáticamente:
+
+1. **En cada Push/PR:**
+   - ✅ Ejecuta linting
+   - ✅ Corre todos los tests
+   - ✅ Verifica cobertura
+   - ✅ Build de Docker images
+
+2. **En Push a `main`:**
+   - ✅ Deploy automático a Vercel (frontend)
+   - ✅ Deploy automático a Render (backend)
+   - ✅ Health check post-deploy
+
+3. **Cada hora:**
+   - ✅ Health check del backend en producción
+   - ✅ Alertas si algo falla
+
+Ver configuración completa en [`.github/workflows/`](.github/workflows/)
+
+![](https://i.imgur.com/waxVImv.png)
+
+## 🎓 Aprendizajes y Decisiones Técnicas
+
+### ¿Por qué Next.js 15?
+
+- App Router para mejor organización
+- Server Components para performance
+- Turbopack para builds ultrarrápidos
+- Built-in optimizaciones de imágenes y fonts
+
+### ¿Por qué Express.js?
+
+- Minimalista y flexible
+- Gran ecosistema de middlewares
+- Fácil de testear y escalar
+- Excelente documentación
+
+### ¿Por qué Supabase?
+
+- PostgreSQL completo (no solo auth)
+- Row Level Security (RLS)
+- Storage integrado
+- Real-time capabilities (futuro)
+- Free tier generoso
+
+### ¿Por qué Google Gemini?
+
+- Modelo de última generación
+- Excelente relación precio/calidad
+- Soporte nativo de streaming
+- Multimodal (texto, imágenes, documentos)
+- API simple y bien documentada
+
+![](https://i.imgur.com/waxVImv.png)
+
+## 📚 Documentación Adicional
+
+- [📖 Frontend README](frontend/README.md) - Detalles del frontend
+- [📖 Backend README](backend/README.md) - Detalles del backend
+- [🐳 Infraestructura](infra/README.md) - Docker y scripts
+- [⚙️ GitHub Actions](.github/README.md) - CI/CD workflows
+
+![](https://i.imgur.com/waxVImv.png)
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
+
+![](https://i.imgur.com/waxVImv.png)
+
+## 👨‍💻 autor
+
+**Marko Teixido**
+
+- GitHub: [@MarkoTeixido](https://github.com/MarkoTeixido)
+- Sitio: [Portfolio](https:markoteixido.site)
 
 ---
-
-## 📊 Métricas del Proyecto
-
-```
-📁 Total Files:         180+
-📝 Lines of Code:       15,000+
-🧪 Tests:               562+
-📊 Code Coverage:       85-90%
-⚡ Build Time:          ~30s (frontend) / ~15s (backend)
-🎯 Lighthouse Score:    95+ (Performance, Accessibility, SEO)
-```
-
----
-
-## 📝 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
-
----
-
-## 👨‍💻 Autor
-
-**Marko**
-- GitHub: [@marko-github](https://github.com/marko-github)
-- LinkedIn: [Tu LinkedIn](#)
-- Portfolio: [Tu Portfolio](#)
-
----
-
-## 🙏 Agradecimientos
-
-- [Next.js](https://nextjs.org/) - Framework React
-- [Supabase](https://supabase.com/) - Backend as a Service
-- [Google Gemini](https://ai.google.dev/) - IA Generativa
-- [Shadcn UI](https://ui.shadcn.com/) - Componentes UI
-- [Vercel](https://vercel.com/) - Hosting Frontend
-- [Render](https://render.com/) - Hosting Backend
-
----
-
-## 📈 Roadmap
-
-- [ ] Sistema de temas (Dark/Light mode)
-- [ ] Soporte multiidioma (i18n)
-- [ ] Búsqueda en conversaciones
-- [ ] Export de conversaciones (PDF, TXT)
-- [ ] Comandos de voz
-- [ ] Compartir conversaciones
-- [ ] Integración con más modelos de IA
-- [ ] App móvil nativa
-
----
-
-<div align="center">
-
-
-</div>
