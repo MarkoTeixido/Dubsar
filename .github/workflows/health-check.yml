@@ -2,7 +2,7 @@ name: Health Check
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Cada hora
+    - cron: '0 */12 * * *'  # Cada 12 horas
   workflow_dispatch:
 
 jobs:
@@ -14,11 +14,12 @@ jobs:
       - name: 🏥 Health Check
         run: |
           echo "🔍 Checking backend health..."
+          echo "⏰ Waiting for Render free instance to wake up (may take up to 60s)..."
           
-          # URL del backend en producción (cambiar por tu URL real)
+          # URL del backend en producción
           BACKEND_URL="${{ secrets.BACKEND_URL || 'http://localhost:8000' }}"
           
-          response=$(curl -s -w "\n%{http_code}" --max-time 10 "$BACKEND_URL/health")
+          response=$(curl -s -w "\n%{http_code}" --max-time 60 "$BACKEND_URL/health")
           http_code=$(echo "$response" | tail -n1)
           body=$(echo "$response" | sed '$d')
           
@@ -47,7 +48,7 @@ jobs:
           BACKEND_URL="${{ secrets.BACKEND_URL || 'http://localhost:8000' }}"
           
           echo "📈 Fetching metrics..."
-          metrics=$(curl -s "$BACKEND_URL/metrics")
+          metrics=$(curl -s --max-time 60 "$BACKEND_URL/metrics")
           echo "$metrics" | jq '.'
           
           # Extraer métricas clave
