@@ -41,7 +41,7 @@ export const chatService = {
   },
 
   /**
-   * ✅ MEJORADO: Obtiene el historial formateado para Gemini
+   * Obtiene el historial formateado para Gemini
    * Ahora acepta historial del cliente para usuarios anónimos
    * @param {string|null} userId - ID del usuario
    * @param {string} conversationId - ID de la conversación
@@ -51,7 +51,7 @@ export const chatService = {
    */
   async getFormattedHistory(userId, conversationId, clientHistory = null, excludeLast = true) {
     try {
-      // ✅ NUEVO: Para usuarios anónimos, usar historial del cliente
+      // Para usuarios anónimos, usar historial del cliente
       if (!userId && clientHistory && Array.isArray(clientHistory)) {
         console.log(`📜 Usando historial del cliente (${clientHistory.length} mensajes)`);
         const historyToFormat = excludeLast 

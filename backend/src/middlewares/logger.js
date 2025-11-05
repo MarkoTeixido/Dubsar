@@ -1,4 +1,3 @@
-// backend/src/middleware/logger.js
 import pino from 'pino';
 
 // Logger configurado

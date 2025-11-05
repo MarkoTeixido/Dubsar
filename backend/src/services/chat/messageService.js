@@ -50,7 +50,7 @@ export const messageService = {
   },
 
   /**
-   * ⚡ NUEVA FUNCIÓN: Descargar imagen y convertir a Base64
+   * Descargar imagen y convertir a Base64
    */
   async imageUrlToBase64(imageUrl) {
     try {
@@ -64,7 +64,7 @@ export const messageService = {
   },
 
   /**
-   * ⚡ ACTUALIZADO: Formatear historial para Gemini CON IMÁGENES REALES
+   * Formatear historial para Gemini CON IMÁGENES REALES
    */
   async formatForGemini(messages) {
     const formattedMessages = [];

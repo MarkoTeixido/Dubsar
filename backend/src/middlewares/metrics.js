@@ -1,5 +1,3 @@
-// backend/src/middleware/metrics.js
-
 // Métricas simples en memoria
 export const metrics = {
   requests: {},

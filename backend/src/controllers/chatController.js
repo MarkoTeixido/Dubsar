@@ -15,7 +15,7 @@ export const chatController = {
    */
   async streamChat(req, res, next) {
     try {
-      // ✅ NUEVO: Aceptar clientHistory del frontend
+      // Aceptar clientHistory del frontend
       const { message, conversationId, fileData, clientHistory } = req.body;
       const userId = req.user?.id;
 
@@ -33,7 +33,7 @@ export const chatController = {
       // Guardar mensaje del usuario (solo si está autenticado)
       await chatService.saveUserMessage(userId, conversationId, message, fileData);
 
-      // ✅ MEJORADO: Obtener historial (usa clientHistory si es anónimo)
+      // Obtener historial (usa clientHistory si es anónimo)
       const geminiHistory = await chatService.getFormattedHistory(
         userId, 
         conversationId, 
@@ -63,9 +63,11 @@ export const chatController = {
         });
       }
 
-      // Si ya se enviaron headers, enviar error por SSE
-      streamingService.sendChunk(res, { error: error.message });
-      res.end();
+      // Verificar que el stream no esté cerrado antes de enviar error por SSE
+      if (!res.writableEnded) {
+        streamingService.sendChunk(res, { error: error.message });
+        res.end();
+      }
     }
   },
 
@@ -76,7 +78,7 @@ export const chatController = {
    */
   async chat(req, res, next) {
     try {
-      // ✅ NUEVO: Aceptar clientHistory del frontend
+      // Aceptar clientHistory del frontend
       const { message, conversationId, fileData, clientHistory } = req.body;
       const userId = req.user?.id;
 
@@ -88,7 +90,7 @@ export const chatController = {
       // Guardar mensaje del usuario (solo si está autenticado)
       await chatService.saveUserMessage(userId, conversationId, message, fileData);
 
-      // ✅ MEJORADO: Obtener historial (usa clientHistory si es anónimo)
+      // Obtener historial (usa clientHistory si es anónimo)
       const geminiHistory = await chatService.getFormattedHistory(
         userId, 
         conversationId, 

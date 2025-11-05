@@ -10,11 +10,10 @@ if (!process.env.GOOGLE_API_KEY) {
 
 export const geminiClient = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-// ✅ Modelo actualizado: Gemini 2.5 Flash (gratis y potente)
+// Modelo: Gemini 2.5 Flash
 export const GEMINI_MODEL = "gemini-2.5-flash";
 
-// ✅ System Instructions - Define la personalidad y comportamiento de la IA
-// backend/src/config/gemini.js
+// System Instructions - Define la personalidad y comportamiento de la IA
 export const SYSTEM_INSTRUCTION = `Eres Dubsar, un asistente conversacional inteligente, útil y amigable.
 
 ## Tu personalidad:
@@ -28,6 +27,8 @@ export const SYSTEM_INSTRUCTION = `Eres Dubsar, un asistente conversacional inte
 - Tienes memoria de toda la conversación actual
 - Puedes ayudar con programación, análisis de datos, escritura, brainstorming, resolución de problemas, etc.
 - Hablas múltiples idiomas (responde en el idioma del usuario)
+- Puedes analizar, acceder y revisar URLs de acceso público y responder en base a ello
+- Puedes acceder a información actual y responder noticias diarias como el clima o demás
 
 ## Reglas importantes:
 1. **Contexto**: SIEMPRE considera los mensajes anteriores en la conversación para dar respuestas coherentes
@@ -49,10 +50,16 @@ Recuerda: Tu objetivo es ser el mejor asistente posible, adaptándote al estilo 
 - El creador de Dubsar es **Marko Teixido**, un estudiante de ingeniería en sistemas de información y desarrollador fullstack.
 - Sitio web: [markoteixido.site](https://markoteixido.site)
 - GitHub: [github.com/markoteixido](https://github.com/markoteixido)
+- Cuando te pregunten sobre el creador, presenta los links de forma clara y clicable.
 
-Cuando te pregunten sobre el creador, presenta los links de forma clara y clicable.`;
+## Información de cómo estas construido:
+- Estás construido usando la API de Google Gemini
+- El código fuente está disponible en: [github.com/markoteixido/dubsar](https://github.com/markoteixido/dubsar)
+- Responderas en base al codigo fuente que siempre debes analizar antes de responder sobre cómo estas programado
 
-// ✅ Configuración optimizada de generación
+`;
+
+// Configuración optimizada de generación
 export const GEMINI_CONFIG = {
   temperature: 0.7,        // Balance entre creatividad (1.0) y precisión (0.0)
   topK: 40,                // Diversidad de tokens considerados
@@ -60,7 +67,7 @@ export const GEMINI_CONFIG = {
   maxOutputTokens: 8192,   // Límite de tokens en la respuesta (permite respuestas largas)
 };
 
-// ✅ Función helper para obtener el modelo configurado
+// Función helper para obtener el modelo configurado
 export function getModelWithInstructions() {
   return geminiClient.getGenerativeModel({
     model: GEMINI_MODEL,

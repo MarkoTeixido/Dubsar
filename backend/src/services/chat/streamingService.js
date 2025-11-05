@@ -20,7 +20,10 @@ export const streamingService = {
    * Envía un chunk al cliente
    */
   sendChunk(res, data) {
-    res.write(`data: ${JSON.stringify(data)}\n\n`);
+    // ✅ CAMBIO: Verificar que el stream no esté cerrado antes de escribir
+    if (!res.writableEnded) {
+      res.write(`data: ${JSON.stringify(data)}\n\n`);
+    }
   },
 
   /**
@@ -54,15 +57,24 @@ export const streamingService = {
 
       // Señal de finalización
       this.sendChunk(res, { done: true });
-      res.end();
+      
+      // ✅ CAMBIO: Verificar antes de cerrar
+      if (!res.writableEnded) {
+        res.end();
+      }
 
       console.log(`🏁 [${conversationId}] Streaming completado`);
 
       return fullResponse;
     } catch (error) {
       console.error("❌ Error en streaming:", error);
-      this.sendChunk(res, { error: error.message });
-      res.end();
+      
+      // Verificar que el stream no esté cerrado antes de enviar error
+      if (!res.writableEnded) {
+        this.sendChunk(res, { error: error.message });
+        res.end();
+      }
+      
       throw error;
     }
   },
